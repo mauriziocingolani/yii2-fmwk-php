@@ -1,7 +1,7 @@
 {
-    "name": "mauriziocingolani/test",
+    "name": "mauriziocingolani/yii2-fmwk-phpp”,
     "keywords": ["yii2", "framework", "php", ""],
-    "version": "1.0.0",
+    "version": “0.1”,
     "authors": [
         {
             "name": "Maurizio Cingolani",
