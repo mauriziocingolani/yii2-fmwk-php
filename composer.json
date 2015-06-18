@@ -1,6 +1,7 @@
 {
     "name": "mauriziocingolani/yii2-fmwk-php",
-    "keywords": ["yii2", "framework", "php", ""],
+    "description": "Parte php del framework basato su Yii2",
+    "keywords": ["yii2", "framework", "php"],
     "authors": [
         {
             "name": "Maurizio Cingolani",
