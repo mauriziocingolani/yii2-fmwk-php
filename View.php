@@ -8,14 +8,14 @@ use yii\helpers\Url;
 /**
  * Estende la classe View aggiungendo alcune funzionalità.
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
- * @version 1.0.1
+ * @version 1.0.2
  */
 class View extends \yii\web\View {
 
     /**
      * Imposta il valore di default della proprietà {@link View::title} con il valore impostato nel parametro 'title' 
      * dell'applicazione se non è impostato il titolo della view. In questo caso solleva un'eccezione se non è
-     * impostatao il parametro dell'applicazione.
+     * impostato il parametro dell'applicazione.
      */
     public function init() {
         parent::init();
@@ -28,15 +28,19 @@ class View extends \yii\web\View {
     /**
      * Aggiunge un breadcrumb alla catena, con i senza link (in base al parametro {@link $url}.
      * Se il parametro {@link $text} non è assegnato viene utilizzata la proprietà {@link View::title}.
-     * @param type $text Testo del breadcrumb
-     * @param type $url Url del breadcrumb (senza slash iniziale)
+     * Restituisce il testo del breadcrumb.
+     * @param string $text Testo del breadcrumb
+     * @param string $url Url del breadcrumb (senza slash iniziale)
+     * @return string Description Testo del breadcrumb
      */
     public function addBreadcrumb($text = null, $url = null) {
         if ($url) :
-            $this->params['breadcrumbs'][] = ['label' => $text ? $text : $this->title, 'url' => [Url::to('/' . $url)]];
+            $bc = ['label' => $text ? $text : $this->title, 'url' => [Url::to('/' . $url)]];
         else :
-            $this->params['breadcrumbs'][] = $text ? $text : $this->title;
+            $bc = $text ? $text : $this->title;
         endif;
+        $this->params['breadcrumbs'][] = $bc;
+        return $bc;
     }
 
 }

@@ -8,11 +8,10 @@ use yii\db\ActiveRecord;
  * Rappresenta una tabella di database con nome e cognome.
  * @property string $FirstName Nome della persona
  * @property string $LastName Cognome della persona
+ * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
+ * @version 1.0
  */
 abstract class NamedActiveRecord extends ActiveRecord {
-
-//    public $FirstName;
-//    public $LastName;
 
     /**
      * Restituisce il nome completo della persona (nome e cognome).

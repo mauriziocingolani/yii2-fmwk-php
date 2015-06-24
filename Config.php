@@ -37,7 +37,7 @@ class Config extends \yii\base\Object {
     public function __construct($id, $basePath, $filesSubfolder = null) {
         $this->_id = $id;
         $this->_basePath = $basePath;
-        $this->_configFolder = dirname(__FILE__) . '/../../config/' . ($filesSubfolder ? $filesSubfolder . '/' : '');
+        $this->_configFolder = dirname(__FILE__) . '/../../../config/' . ($filesSubfolder ? $filesSubfolder . '/' : '');
         parent::__construct();
     }
 
@@ -73,7 +73,7 @@ class Config extends \yii\base\Object {
                 'rules' => require $this->_configFolder . 'rules.php',
             ],
             'view' => [
-                'class' => 'app\components\framework\View',
+                'class' => 'mauriziocingolani\yii2fmwkphp\View',
             ],
         ];
         $this->_language = 'it-IT';
