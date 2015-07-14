@@ -9,7 +9,7 @@ namespace mauriziocingolani\yii2fmwkphp;
  * @property string $timezone
  * @property string $version
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
- * @version 1.0.3
+ * @version 1.0.4
  */
 class Config extends \yii\base\Object {
 
@@ -41,6 +41,9 @@ class Config extends \yii\base\Object {
         parent::__construct();
     }
 
+    /**
+     * Inizializza tutte le proprietà con i valori di default e con i componenti standard.
+     */
     public function init() {
         $this->_aliases = [
             '@modules' => '@app/modules',
@@ -54,7 +57,7 @@ class Config extends \yii\base\Object {
                     'yii\web\JqueryAsset' => [
                         'sourcePath' => null, // do not publish the bundle
                         'js' => [
-                            '//code.jquery.com/jquery-1.11.2.min.js',
+                            '//code.jquery.com/jquery-1.11.3.min.js',
                         ]
                     ],
                 ],
@@ -96,35 +99,86 @@ class Config extends \yii\base\Object {
         $this->_version = '1.0';
     }
 
+    /* Componenti */
+
+    /**
+     * Aggiunge il componente per l'autenticazione tramite servizi esterni.
+     * @param array $clients Meccanismi di autenticazione esterni (Facebook, Google, etc)
+     * @return \mauriziocingolani\yii2fmwkphp\Config Oggetto corrente (per concatenamento)
+     */
     public function addAuthComponent(array $clients) {
         $this->_components['authClientCollection'] = [
             'class' => 'yii\authclient\Collection',
             'clients' => $clients,
         ];
+        return $this;
     }
 
-    public function addModule($module) {
-        array_merge($this->_modules, $module);
+    /**
+     * Aggiunge il componente per la cache su database.
+     * @param string $tableName Nome della tabella per i dati di cache (default 'YiiCache')
+     * @return \mauriziocingolani\yii2fmwkphp\Config Oggetto corrente (per concatenamento)
+     */
+    public function addCacheComponent($tableName = null) {
+        $this->_components['cache'] = [
+            'class' => 'yii\caching\DbCache',
+            'cacheTable' => $tableName ? $tableName : 'YiiCache',
+        ];
+        return $this;
     }
 
+    /**
+     * Aggiunge il componente per la connessione al db. I parametri di configurazione 
+     * vengono caricati dal file 'db.php' (presente nella cartella dei files di configurazione).
+     * @return \mauriziocingolani\yii2fmwkphp\Config Oggetto corrente (per concatenamento)
+     */
     public function addDbComponent() {
         $this->_components['db'] = require $this->_configFolder . 'db.php';
         return $this;
     }
 
+    /**
+     * Aggiunge il componente per l'invio delle mail. I parametri di configurazione 
+     * vengono caricati dal file 'mail.php' (presente nella cartella dei files di configurazione).
+     * @return \mauriziocingolani\yii2fmwkphp\Config Oggetto corrente (per concatenamento)
+     */
     public function addMailComponent() {
-        $this->_components['mailer'] = [
-            'class' => 'yii\swiftmailer\Mailer',
-        ];
+        $this->_components['mailer'] = require $this->_configFolder . 'mail.php';
+        return $this;
     }
 
-    public function addSessionComponent($tableName = 'YiiSessions') {
-        $this->_components['session'] = [
-            'class' => 'yii\web\DbSession',
-            'sessionTable' => $tableName,
-        ];
+    /**
+     * Aggiunge il componente per il salvataggio su database dei dati di sessione.
+     * Tramite l'array dei parametri è possibile impostare il nome della tabella (default 'YiiSessions')
+     * e la durata (in secondi) della sessione.
+     * @param array $params Parametri di configurazione ('sessionTable','timeout')
+     * @return \mauriziocingolani\yii2fmwkphp\Config Oggetto corrente (per concatenamento)
+     */
+    public function addSessionComponent(array $params = null) {
+        if (is_array($params))
+            $this->_components['session'] = [
+                'class' => 'yii\web\DbSession',
+                'sessionTable' => is_array($params) && isset($params['sessionTable']) ? $params['sessionTable'] : 'YiiSessions',
+                'timeout' => is_array($params) && isset($params['timeout']) ? $params['timeout'] : 1440,
+            ];
+        return $this;
     }
 
+    /**
+     * Aggiunge il componente per la visualizzazione dei tweet relativi all'applicazione.
+     * I parametri di configurazione vengono caricati dal file 'twitter.php' (presente nella cartella dei files di configurazione).
+     * @return \mauriziocingolani\yii2fmwkphp\Config Oggetto corrente (per concatenamento)
+     */
+    public function addTwitterComponent() {
+        $this->_components['twitter'] = require $this->_configFolder . 'twitter.php';
+        return $this;
+    }
+
+    /**
+     * Aggiunge il componente per la gestione del login utente. Presuppone che esistano le classi app\components\AppUser
+     * (sottoclasse di yii\web\User) e app\modules\user\models\User.
+     * @return \mauriziocingolani\yii2fmwkphp\Config Oggetto corrente (per concatenamento)
+     */
     public function addUserComponent() {
         $this->_components['user'] = [
             'class' => 'app\components\AppUser',
@@ -135,6 +189,24 @@ class Config extends \yii\base\Object {
         return $this;
     }
 
+    /* Moduli */
+
+    /**
+     * Aggiunge un modulo all'applicazione.
+     * @param array $module Array diu configurazione del modulo
+     * @return \mauriziocingolani\yii2fmwkphp\Config Oggetto corrente (per concatenamento)
+     */
+    public function addModule($module) {
+        array_merge($this->_modules, $module);
+        return $this;
+    }
+
+    /**
+     * Aggiunge il modulo utente, con le classi di gestione database e le funzionalità base (login, logout,
+     * gestione ruoli e utenti).
+     * @param string $class Classe che rappresenta un utente dell'applicazione (default 'app\modules\user\User')
+     * @return \mauriziocingolani\yii2fmwkphp\Config Oggetto corrente (per concatenamento)
+     */
     public function addUserModule($class = 'app\modules\user\User') {
         $this->_modules['user'] = [
             'class' => $class,
@@ -142,6 +214,13 @@ class Config extends \yii\base\Object {
         return $this;
     }
 
+    /* Metodi */
+
+    /**
+     * Abilita Gii per gli ip indicati.
+     * @param array $allowedIps Lista degli ip abilitati
+     * @return \mauriziocingolani\yii2fmwkphp\Config Oggetto corrente (per concatenamento)
+     */
     public function enableGii(array $allowedIps) {
         $this->_bootstrap[] = 'gii';
         $this->_modules['gii'] = [
@@ -151,6 +230,10 @@ class Config extends \yii\base\Object {
         return $this;
     }
 
+    /**
+     * Restituisce l'array di configurazione per l'applicazione.
+     * @return array Array di configurazione
+     */
     public function getConfig() {
         return [
             # required
@@ -173,24 +256,54 @@ class Config extends \yii\base\Object {
 
     /* Setters */
 
+    /**
+     * Imposta la route (controller/action) che intercetta tutte le chimate.
+     * @param string $catchAll Valore della proprietà {@link $catchAll}
+     * @return \mauriziocingolani\yii2fmwkphp\Config Oggetto corrente (per concatenamento)
+     */
     public function setCatchAll(array $catchAll) {
         $this->_catchAll = $catchAll;
+        return $this;
     }
 
+    /**
+     * Imposta il linguaggio di default dell'applicazione.
+     * @param string $language Valore della proprietà {@link $language}
+     * @return \mauriziocingolani\yii2fmwkphp\Config Oggetto corrente (per concatenamento)
+     */
     public function setLanguage($language) {
         $this->_language = $language;
+        return $this;
     }
 
+    /**
+     * Imposta il nome dell'applicazione.
+     * @param string $name Valore della proprietà {@link $name}
+     * @return \mauriziocingolani\yii2fmwkphp\Config Oggetto corrente (per concatenamento)
+     */
     public function setName($name) {
         $this->_name = $name;
+        return $this;
     }
 
+    /**
+     * Imposta la timezone dell'applicazione.
+     * @param string $timeZone Valore della proprietà {@link $timeZone}
+     * @return \mauriziocingolani\yii2fmwkphp\Config Oggetto corrente (per concatenamento)
+     */
     public function setTImezone($timeZone) {
         $this->_timeZone = $timeZone;
+        return $this;
     }
 
+    /**
+     * Imposta la versione dell'applicazione.
+     * @param string $version Valore della proprietà {@link $version}
+     * @return \mauriziocingolani\yii2fmwkphp\Config Oggetto corrente (per concatenamento)
+     */
     public function setVersion($version) {
         $this->_version = $version;
+        return $this;
     }
 
 }
