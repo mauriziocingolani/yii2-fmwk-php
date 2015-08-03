@@ -9,7 +9,7 @@ namespace mauriziocingolani\yii2fmwkphp;
  * @property string $timezone
  * @property string $version
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
- * @version 1.0.4
+ * @version 1.0.5
  */
 class Config extends \yii\base\Object {
 
@@ -25,6 +25,7 @@ class Config extends \yii\base\Object {
     private $_modules;
     private $_name;
     private $_params;
+    private $_sourceLanguage;
     private $_timeZone;
     private $_version;
 
@@ -80,6 +81,7 @@ class Config extends \yii\base\Object {
             ],
         ];
         $this->_language = 'it-IT';
+        $this->_sourceLanguage = 'en-EN';
         $this->_modules = [
             'migrate' => [
                 'class' => 'app\modules\migrate\migrate',
@@ -128,12 +130,45 @@ class Config extends \yii\base\Object {
     }
 
     /**
+     * Aggiunge all'applicazione il componente specificato.
+     * @param array $component Componente
+     * @return \mauriziocingolani\yii2fmwkphp\Config Oggetto corrente (per concatenamento)
+     * @throws Exception Se il parametro passato non è un array
+     */
+    public function addComponent(array $component) {
+        if (!is_array($component))
+            throw new Exception(__CLASS__ . ' -> ' . __FUNCTION__ . ': parametro non valido');
+        $this->_components = array_merge($this->_components, $component);
+        return $this;
+    }
+
+    /**
      * Aggiunge il componente per la connessione al db. I parametri di configurazione 
      * vengono caricati dal file 'db.php' (presente nella cartella dei files di configurazione).
      * @return \mauriziocingolani\yii2fmwkphp\Config Oggetto corrente (per concatenamento)
      */
     public function addDbComponent() {
         $this->_components['db'] = require $this->_configFolder . 'db.php';
+        return $this;
+    }
+
+    /**
+     * Aggiunge il componente per la traduzione dei testi al db. Di default viene impostata la cartella
+     * 'messages' per il files delle traduzioni.
+     * @param string $basePath Cartella che contiene le traduzioni
+     * @return \mauriziocingolani\yii2fmwkphp\Config Oggetto corrente (per concatenamento)
+     */
+    public function addI18NComponent($basePath = null) {
+        if (!$basePath)
+            $basePath = $_SERVER['DOCUMENT_ROOT'] . '/../messages';
+        $this->_components['i18n'] = [
+            'translations' => [
+                '*' => [
+                    'class' => 'yii\i18n\PhpMessageSource',
+                    'basePath' => $basePath,
+                ]
+            ],
+        ];
         return $this;
     }
 
@@ -197,7 +232,7 @@ class Config extends \yii\base\Object {
      * @return \mauriziocingolani\yii2fmwkphp\Config Oggetto corrente (per concatenamento)
      */
     public function addModule($module) {
-        array_merge($this->_modules, $module);
+        $this->_modules = array_merge($this->_modules, $module);
         return $this;
     }
 
@@ -240,6 +275,7 @@ class Config extends \yii\base\Object {
             'id' => $this->_id,
             'basePath' => $this->_basePath,
             # info
+            'sourceLanguage' => $this->_sourceLanguage,
             'language' => $this->_language,
             'name' => $this->_name,
             'version' => $this->_version,
@@ -267,7 +303,7 @@ class Config extends \yii\base\Object {
     }
 
     /**
-     * Imposta il linguaggio di default dell'applicazione.
+     * Imposta il linguaggio dell'applicazione.
      * @param string $language Valore della proprietà {@link $language}
      * @return \mauriziocingolani\yii2fmwkphp\Config Oggetto corrente (per concatenamento)
      */
@@ -283,6 +319,16 @@ class Config extends \yii\base\Object {
      */
     public function setName($name) {
         $this->_name = $name;
+        return $this;
+    }
+
+    /**
+     * Imposta il linguaggio di default dell'applicazione.
+     * @param string $language Valore della proprietà {@link $sourceLanguage}
+     * @return \mauriziocingolani\yii2fmwkphp\Config Oggetto corrente (per concatenamento)
+     */
+    public function setSourceLanguage($language) {
+        $this->_sourceLanguage = $language;
         return $this;
     }
 
