@@ -3,11 +3,12 @@
 namespace mauriziocingolani\yii2fmwkphp;
 
 use Yii;
+use yii\base\InvalidParamException;
 
 /**
  * Definisce alcuni metodi utility per la gestione delle password.
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
- * @version 1.0
+ * @version 1.0.1
  */
 class PasswordHelper {
 
@@ -37,15 +38,21 @@ class PasswordHelper {
     }
 
     /**
-     * Genera una password di lunghezza indicata (10 caratteri di default). Attualmente la password è una sottostringa
-     * di un sha1, e pertanto contiene solo lettere minuscole e numeri.
-     * @param int $length Lunghezza della password (default 10)
+     * Genera una password di lunghezza indicata utilizzando lettere minuscole e maiuscole, cifre
+     * ed eventualmente i caratteri speciali $@#&%
+     * @param int $length Lunghezza della password (da 1 a 255, default 10)
+     * @param boolean $allowSpecialCharacters Se true inserisce i caratteri speciali $@#&%
      * @return string Password generata
+     * @throws Exception Se la lunghezza indicata è minore di 1 o maggiore di 255
      */
-    public static function GeneratePassword($length = 10) {
-        if ((int) $length < 10)
-            throw new \yii\base\InvalidParamException('La lunghezza della password non può essere inferiore a 10 caratteri');
-        return substr(sha1(time()), 0, $length);
+    public static function GeneratePassword($length = 10, $allowSpecialCharacters = false) {
+        if ((int) $length <= 0 || (int) $length >= 255)
+            throw new InvalidParamException('La lunghezza della password non può essere inferiore a 10 caratteri');
+        $alphabet = array_merge(range(0, 9), range('a', 'z'), range('A', 'Z'));
+        if ($allowSpecialCharacters)
+            $alphabet = array_merge($alphabet, array('$', '@', '#', '&', '%'));
+        shuffle($alphabet);
+        return implode('', array_slice($alphabet, 0, $length));
     }
 
 }
