@@ -7,6 +7,7 @@ use yii\db\Schema;
 /**
  * Aggiunge costanti e funzionalità alla classe yii\db\Migration.
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
+ * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
  * @version 1.0.2
  */
 class Migration extends \yii\db\Migration {

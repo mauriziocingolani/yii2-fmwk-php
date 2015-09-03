@@ -9,6 +9,7 @@ use yii\db\ActiveRecord;
  * @property string $FirstName Nome della persona
  * @property string $LastName Cognome della persona
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
+ * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
  * @version 1.0
  */
 abstract class NamedActiveRecord extends ActiveRecord {

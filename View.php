@@ -8,6 +8,7 @@ use yii\helpers\Url;
 /**
  * Estende la classe View aggiungendo alcune funzionalità.
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
+ * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
  * @version 1.0.2
  */
 class View extends \yii\web\View {
