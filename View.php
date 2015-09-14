@@ -3,13 +3,14 @@
 namespace mauriziocingolani\yii2fmwkphp;
 
 use Yii;
+use yii\bootstrap\Alert;
 use yii\helpers\Url;
 
 /**
  * Estende la classe View aggiungendo alcune funzionalità.
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @version 1.0.2
+ * @version 1.0.3
  */
 class View extends \yii\web\View {
 
@@ -42,6 +43,39 @@ class View extends \yii\web\View {
         endif;
         $this->params['breadcrumbs'][] = $bc;
         return $bc;
+    }
+
+    /**
+     * Crea un alert Bootstrap per ogni messaggio flash presente.
+     * Si presuppone che il nome del flash da mostrare sia 'success', 'danger', oppure una stringa del tipo
+     * 'success_...' o 'danger_...'. In questo caso, segnalato dalla presenza dell'underscore, viene utilizzata
+     * come classe dell'alert il testo antecedente il primo underscore.
+     * Il parametro (opzionale) permette di specificare i nomi dei flash che verranno mostrati, in modo da poter
+     * utilizzare il metodo per due diversi blocchi di messaggi nella stessa pagina.
+     * @param string[] $allowedTypes Nomi dei flash consentiti
+     */
+    public function addFlashDivs(array $allowedTypes = null) {
+        # creao un array con i valori come chiavi per fare la ricerca
+        $keys = null;
+        if (isset($allowedTypes)) :
+            foreach ($allowedTypes as $k => $v) :
+                $keys[$v] = null;
+            endforeach;
+        endif;
+        # analizzo i messaggi flash uno a uno
+        foreach (Yii::$app->session->allFlashes as $type => $message) :
+            if (isset($allowedTypes) && array_search($type, $keys) == false)
+                continue;# non visualizzo il flash se non è compreso tra quelli consentiti
+            if (($i = strpos($type, '_')) !== false)
+                $type = substr($type, 0, $i);
+            echo Alert::widget([
+                'closeButton' => false,
+                'options' => [
+                    'class' => 'alert-' . $type,
+                ],
+                'body' => $message,
+            ]);
+        endforeach;
     }
 
 }
