@@ -10,7 +10,7 @@ use yii\helpers\Url;
  * Estende la classe View aggiungendo alcune funzionalità.
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @version 1.0.3
+ * @version 1.0.4
  */
 class View extends \yii\web\View {
 
@@ -76,6 +76,16 @@ class View extends \yii\web\View {
                 'body' => $message,
             ]);
         endforeach;
+    }
+
+    /**
+     * Registra lo script per rispondere al click sulla checkbox mostrando o nascondendo
+     * i caratteri del campo password (tramite attributo 'type' del campo).
+     * @param string $checkboxId Id della checkbox (default 'reveal-password')
+     * @param string $passwordFieldId Id del campo password (default 'loginform-password')
+     */
+    public function registerShowPasswordScript($checkboxId = 'reveal-password', $passwordFieldId = 'loginform-password') {
+        $this->registerJs("jQuery('#$checkboxId').change(function(){jQuery('#$passwordFieldId').attr('type',this.checked?'text':'password');})");
     }
 
 }
