@@ -13,7 +13,7 @@ use yii\web\User;
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
  * @version 1.0
  */
-class AppUser extends User {
+class AppWebUser extends User {
 
     const ROLE_DEVELOPER = 1;
 
