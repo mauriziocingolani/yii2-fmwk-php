@@ -10,7 +10,7 @@ namespace mauriziocingolani\yii2fmwkphp;
  * @property string $version
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @version 1.0.5
+ * @version 1.0.6
  */
 class Config extends \yii\base\Object {
 
@@ -97,6 +97,7 @@ class Config extends \yii\base\Object {
             $this->_catchAll = [
                 'site/offline',
             ];
+        $this->_params = require $this->_configFolder . 'params.php';
         $this->_name = 'My Application';
         $this->_timeZone = 'Europe/Rome';
         $this->_version = '1.0';
@@ -286,9 +287,29 @@ class Config extends \yii\base\Object {
             'catchAll' => $this->_catchAll,
             'components' => $this->_components,
             'modules' => $this->_modules,
-            'params' => require $this->_configFolder . 'params.php',
+            'params' => $this->_params,
             'catchAll' => $this->_catchAll,
         ];
+    }
+
+    /**
+     * Restiruisce il valore del parametro di configurazione specificato. Per parametri su più
+     * livelli vanno passati tanti parametri quanti sono i livelli da raggiungere all'interno dell'array
+     * di configurazione, specificando l'intero percorso del parametro.
+     * @return mixed Valore del parametro di configurazione
+     * @throws \yii\base\InvalidConfigException
+     */
+    public function getParam() {
+        $args = func_get_args();
+        $a = $this->_params;
+        foreach ($args as $arg) :
+            if (isset($a[$arg])) :
+                $a = $a[$arg];
+            else :
+                throw new \yii\base\InvalidConfigException("Elemento <code>$arg</code> non presente nell'array dei parametri. ");
+            endif;
+        endforeach;
+        return $a;
     }
 
     /* Setters */

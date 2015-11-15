@@ -2,6 +2,7 @@
 
 namespace mauriziocingolani\yii2fmwkphp;
 
+use Yii;
 use yii\web\User;
 
 /**
