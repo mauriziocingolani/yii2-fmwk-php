@@ -10,7 +10,7 @@ namespace mauriziocingolani\yii2fmwkphp;
  * @property string $version
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @version 1.0.6
+ * @version 1.0.7
  */
 class Config extends \yii\base\Object {
 
@@ -236,6 +236,24 @@ class Config extends \yii\base\Object {
     public function addModule($module) {
         $this->_modules = array_merge($this->_modules, $module);
         return $this;
+    }
+
+    /**
+     * Aggiunge il modulo per il tracciamento di Google Analytics (kartik\social).
+     * Presuppone che siano stati impostati i due parametri di configurazione:
+     * <ul>
+     * <li>['googleAnalytics']['id']</il>
+     * <li>['googleAnalytics']['domain']</il>
+     * </ul>
+     */
+    public function addGoogleAnalyticsModule() {
+        $this->_modules['social'] = [
+            'class' => 'kartik\social\Module',
+            'googleAnalytics' => [
+                'id' => $this->getParam('googleAnalytics', 'id'),
+                'domain' => $this->getParam('googleAnalytics', 'domain'),
+            ],
+        ];
     }
 
     /**
