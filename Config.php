@@ -10,7 +10,7 @@ namespace mauriziocingolani\yii2fmwkphp;
  * @property string $version
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @version 1.0.7
+ * @version 1.0.8
  */
 class Config extends \yii\base\Object {
 
@@ -201,6 +201,16 @@ class Config extends \yii\base\Object {
         return $this;
     }
 
+    /**
+     * Aggiunge il componente per l'interazione con il Telegram Bot relativo all'applicazione.
+     * I parametri di configurazione vengono caricati dal file 'telegram.php' (presente nella cartella dei files di configurazione).
+     * @return \mauriziocingolani\yii2fmwkphp\Config Oggetto corrente (per concatenamento)
+     */
+    public function addTelegramComponent() {
+        $this->_components['telegram'] = require $this->_configFolder . 'telegram.php';
+        return $this;
+    }
+    
     /**
      * Aggiunge il componente per la visualizzazione dei tweet relativi all'applicazione.
      * I parametri di configurazione vengono caricati dal file 'twitter.php' (presente nella cartella dei files di configurazione).
