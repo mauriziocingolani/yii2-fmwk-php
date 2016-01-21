@@ -10,7 +10,7 @@ use yii\helpers\Url;
  * Estende la classe View aggiungendo alcune funzionalità.
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @version 1.0.4
+ * @version 1.0.5
  */
 class View extends \yii\web\View {
 
@@ -43,6 +43,16 @@ class View extends \yii\web\View {
         endif;
         $this->params['breadcrumbs'][] = $bc;
         return $bc;
+    }
+
+    /**
+     * Restituisce il tag HTML per aggiungere la favicon.
+     * Di default il percorso è <code>'/images/favicon.ico'</code>.
+     * @param string $path Immagine (percorso assoluto)
+     * @return sting Tag HTML della favicon
+     */
+    public function addFavicon($path = '/images/favicon.icon') {
+        return '<link href="' . $path . '" rel="icon" type="image/x-icon" />';
     }
 
     /**
