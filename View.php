@@ -51,7 +51,7 @@ class View extends \yii\web\View {
      * @param string $path Immagine (percorso assoluto)
      * @return sting Tag HTML della favicon
      */
-    public function addFavicon($path = '/images/favicon.icon') {
+    public function addFavicon($path = '/images/favicon.ico') {
         return '<link href="' . $path . '" rel="icon" type="image/x-icon" />';
     }
 
