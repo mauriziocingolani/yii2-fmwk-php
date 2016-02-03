@@ -12,18 +12,36 @@ use yii\web\User;
  * 
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @version 1.0
+ * @version 1.0.1
  */
 class AppWebUser extends User {
 
     const ROLE_DEVELOPER = 1;
 
     /**
-     * 
+     * Verifica se l'utente attuale è di classe Developer.
      * @return bool True se l'utente loggato è di classe developer, false altrimenti
      */
     public function isDeveloper() {
         return !Yii::$app->user->isGuest && Yii::$app->user->identity->RoleID == self::ROLE_DEVELOPER;
+    }
+
+    /**
+     * Verifica se il ruolo dell'utente attualmente loggato è quello indicato.
+     * Restituisce true se si verifica una delle seguenti condizioni:
+     * <ul>
+     * <li>il ruolo dell'utente attuale è quello indicato</li>
+     * <li>l'utente attualmente loggato è di classe Developer e $includeDeveloper è true</li>
+     * </ul>
+     * Ovviamente restituisce false se nessun utente è loggato.
+     * @param integer $role Ruolo da verificare
+     * @param boolean $includeDeveloper Se impostato a true, fa sì che l'utente di classe Developer risulti avere il ruolo indicato
+     * @return boolean True se l'utente attuale è del ruolo indicato
+     */
+    protected function isRole($role, $includeDeveloper) {
+        return !Yii::$app->user->isGuest &&
+                (Yii::$app->user->identity->RoleID == $role ||
+                ($includeDeveloper && Yii::$app->user->identity->RoleID == self::ROLE_DEVELOPER));
     }
 
     /**
