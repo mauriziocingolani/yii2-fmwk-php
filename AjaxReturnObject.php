@@ -9,14 +9,16 @@ use yii\base\Object;
 /**
  * Oggetto restituita da un'azione in risposta a una chiamata AJAX.
  * Espone le proprietà {@link $error}, per capire se si è verificato un errore o meno,
- * e {@link $message} per il messaggio di successo o di errore.
+ * e {@link $message} per il messaggio di successo o di errore. La proprietà {$link $attachment}
+ * permette di allegare alla richiesta dati di qualsiasi tipo.
  * @property array $data
  * @property boolean $error
  * @property string $message
+ * @property mixed $attachment
  * 
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @version 1.0
+ * @version 1.0.1
  */
 class AjaxReturnObject extends Object {
 
@@ -25,6 +27,7 @@ class AjaxReturnObject extends Object {
 
     private $_error = false;
     private $_message = null;
+    private $_attachment = null;
 
     /**
      * Costruisce una nuova istanza della classe. Se viene passato un valore come primo parametro viene impostato
@@ -50,7 +53,7 @@ class AjaxReturnObject extends Object {
      * @return string JSON con le proprietà {@link $error} e {@link $message} dell'oggetto
      */
     public function getData() {
-        return json_encode(['error' => $this->_error, 'message' => $this->_message]);
+        return json_encode(['error' => $this->_error, 'message' => $this->_message, 'attachment' => $this->_attachment]);
     }
 
     /**
@@ -98,6 +101,14 @@ class AjaxReturnObject extends Object {
      */
     public function setMessage($message) {
         $this->_message = $message;
+    }
+
+    /**
+     * Imposta i ll valore della proprietà {@link $attachment}.
+     * @param mixed $value Dati da allegare alla richiesta
+     */
+    public function setAttachment($value) {
+        $this->_attachment = $value;
     }
 
 }
