@@ -10,7 +10,7 @@ use yii\helpers\Url;
  * Estende la classe View aggiungendo alcune funzionalità.
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @version 1.0.5
+ * @version 1.0.6
  */
 class View extends \yii\web\View {
 
@@ -65,16 +65,9 @@ class View extends \yii\web\View {
      * @param string[] $allowedTypes Nomi dei flash consentiti
      */
     public function addFlashDivs(array $allowedTypes = null) {
-        # creao un array con i valori come chiavi per fare la ricerca
-        $keys = null;
-        if (isset($allowedTypes)) :
-            foreach ($allowedTypes as $k => $v) :
-                $keys[$v] = null;
-            endforeach;
-        endif;
         # analizzo i messaggi flash uno a uno
         foreach (Yii::$app->session->allFlashes as $type => $message) :
-            if (isset($allowedTypes) && array_search($type, $keys) == false)
+            if (isset($allowedTypes) && array_search($type, $allowedTypes) === false)
                 continue;# non visualizzo il flash se non è compreso tra quelli consentiti
             if (($i = strpos($type, '_')) !== false)
                 $type = substr($type, 0, $i);
