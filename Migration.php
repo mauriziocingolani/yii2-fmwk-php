@@ -8,7 +8,7 @@ use yii\db\Schema;
  * Aggiunge costanti e funzionalità alla classe yii\db\Migration.
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @version 1.0.2
+ * @version 1.0.3
  */
 class Migration extends \yii\db\Migration {
 
@@ -75,6 +75,15 @@ class Migration extends \yii\db\Migration {
      */
     protected static function typeFloat($notNull = false) {
         return 'FLOAT' . ($notNull === true ? ' NOT NULL' : '');
+    }
+
+    /**
+     * Restituisce la definizione di tipo per un text  (eventualmente NOT NULL).
+     * @param boolean $notNull True per richiedere che il campo sia NOT NULL
+     * @return string Definizione di tipo per un text
+     */
+    protected static function typeText($notNull = false) {
+        return 'TEXT' . ($notNull === true ? ' NOT NULL' : '');
     }
 
     /**
