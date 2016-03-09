@@ -8,7 +8,7 @@ use yii\db\Schema;
  * Aggiunge costanti e funzionalità alla classe yii\db\Migration.
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @version 1.0.3
+ * @version 1.0.4
  */
 class Migration extends \yii\db\Migration {
 
@@ -49,6 +49,15 @@ class Migration extends \yii\db\Migration {
     }
 
     /**
+     * Restituisce la definizione di tipo per un boolean (eventualmente NOT NULL).
+     * @param boolean $notNull True per richiedere che il campo sia NOT NULL
+     * @return string Definizione di tipo per un boolean
+     */
+    protected static function typeBoolean($notNull = false) {
+        return 'boolean' . ($notNull === true ? ' NOT NULL' : '');
+    }
+
+    /**
      * Restituisce la definizione di tipo per un char di lunghezza indicata (eventualmente NOT NULL).
      * @param inteerg $length Numero di caratteri del campo
      * @param boolean $notNull True per richiedere che il campo sia NOT NULL
@@ -66,6 +75,21 @@ class Migration extends \yii\db\Migration {
      */
     protected static function typeDate($time = false, $notNull = false) {
         return 'DATE' . ($time ? 'TIME' : '') . ($notNull === true ? ' NOT NULL' : '');
+    }
+
+    /**
+     * Restituisce la definizione di tipo per un enum (eventualmente NOT NULL)
+     * con le opzioni specificate.
+     * La gestione degli apostrofi sulle singole opzioni viene fatta internamente,
+     * quindi non è necessario provvedere a monte.
+     * @param array $options Lista dei possibili valori del campo
+     * @param boolean $notNull True per richiedere che il campo sia NOT NULL
+     * @return string Definizione di tipo per un enum
+     */
+    protected static function typeEnum(array $options, $notNull = false) {
+        return "ENUM('" . implode("','", array_map(function($s) {
+                            return preg_replace('/\'/', "''", $s);
+                        }, $options)) . "')" . ($notNull === true ? ' NOT NULL' : '');
     }
 
     /**
