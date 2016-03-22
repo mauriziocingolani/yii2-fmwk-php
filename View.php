@@ -10,21 +10,70 @@ use yii\helpers\Url;
  * Estende la classe View aggiungendo alcune funzionalità.
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @version 1.0.6
+ * @version 1.0.7
  */
 class View extends \yii\web\View {
 
+    /** Titolo della pagina. */
+    public $pageTitle;
+
+    /** Descrizione della pagina. */
+    public $pageDescription;
+
     /**
-     * Imposta il valore di default della proprietà {@link View::title} con il valore impostato nel parametro 'title' 
-     * dell'applicazione se non è impostato il titolo della view. In questo caso solleva un'eccezione se non è
-     * impostato il parametro dell'applicazione.
+     * Imposta il titolo della pagina secondo i seguenti criteri:
+     * <ul>
+     * <li>Se la proprietà <code>$pageTitle</code> non è impostata viene utilizzato il parametro
+     * <code>'title'</code> dell'applicazione. Se nemmeno quest'ultimo è impostato viene sollevata
+     * un'eccezione.</li>
+     * <li>Se la proprietà <code>$pageTitle</code> è assegnata, allora viene utilizzato il parametro
+     * <code>'title'</code> dell'applicazione come prefisso, sempre che sia stato impostato. Il separatore
+     * tra il prefisso e il titolo della pagina può essere specificato tramite il parametro <code>'titleSeparator'</code>
+     * dell'applicazione. Altrimenti viene utilizzato di default il carattere '-'.</li>
+     * </ul>
+     * Quindi imposta la descrizione della pagina secondo i seguenti criteri:
+     * <ul>
+     * <li>Se la proprietà <code>$pageDescription</code> non è assegnata esplicitamente viene utilizzato
+     *  il parametro <code>'description'</code> dell'applicazione.</li>
+     * <li>Se nemmeno il parametro <code>'description'</code> è assegnato viene sollevata un'eccezione</li>
+     * </ul>
+     * Le impostazioni vengono fatte in questo metodo per consentire l'assegnazione del valore
+     * alla proprietà <code>$pageTitle</code> e <code>$pageDescription</code> nella view invece che nel controller.
+     * @throws \yii\base\InvalidConfigException Se nessun titolo o nessuna descrizione sono stati impostati
      */
-    public function init() {
-        parent::init();
-        if (!$this->title && !isset(\Yii::$app->params['title']))
-            throw new \yii\base\InvalidConfigException('Il parametro \'title\' non è stato impostato.');
-        if (!$this->title)
-            $this->title = Yii::$app->params['title'];
+    public function afterRender($viewFile, $params, &$output) {
+        parent::afterRender($viewFile, $params, $output);
+        # titolo
+        if ($this->pageTitle) :
+            if (isset(Yii::$app->params['title'])) :
+                $this->title = Yii::$app->params['title'] . ' ' . (isset(Yii::$app->params['titleSeparator']) ? Yii::$app->params['titleSeparator'] : '-') . ' ' . $this->pageTitle;
+            endif;
+        else :
+            if (isset(Yii::$app->params['title'])) :
+                $this->title = Yii::$app->params['title'];
+            else :
+                throw new \yii\base\InvalidConfigException('Il parametro \'title\' non è stato impostato.');
+            endif;
+        endif;
+        # descrizione
+        if (!$this->pageDescription) :
+            if (isset(Yii::$app->params['description'])) :
+                $this->pageDescription = Yii::$app->params['description'];
+            else :
+                throw new \yii\base\InvalidConfigException('Il parametro \'description\' non è stato impostato.');
+            endif;
+        else :
+        endif;
+    }
+
+    /** Il titolo della pagina viene impostato secondo i seguenti criteri:
+     * <ul>
+     * 
+     * </ul>
+     * @param string $separator Carattere di separazione tra nome del sito/applicazione e pagina
+     */
+    private function _setTitle($separator = '-') {
+        
     }
 
     /**
