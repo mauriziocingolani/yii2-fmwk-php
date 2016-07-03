@@ -8,7 +8,7 @@ use yii\base\Object;
  * Utilità per oggetti di classe DateTime.
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @version 1.0
+ * @version 1.0.1
  */
 class DateTime extends Object {
 
@@ -109,6 +109,24 @@ class DateTime extends Object {
         if ($forceShowSeconds || ($diff->m == 0 && $diff->h == 0 && $diff->i == 0))
             $s[] = "{$diff->s}s";
         return join(' ', $s);
+    }
+
+    /**
+     * Trasforma una data in formato MySQL (yyyy-mm-dd) in formato italiano (dd/mm/yyyy).
+     * @param string $dateString Data in formato MySQL
+     * @return string Data in formato italiano
+     */
+    public static function MySQLToItalian($dateString) {
+        return join('/', array_reverse(preg_split('/-/', $dateString)));
+    }
+
+    /**
+     * Trasforma una data in formato italiano (dd/mm/yyyy) in formato MySQL (yyyy-mm-dd).
+     * @param string $dateString Data in formato italiano
+     * @return string Data in formato MySQL
+     */
+    public static function ItalianToMySQL($dateString) {
+        return join('-', array_reverse(preg_split('/\//', $dateString)));
     }
 
 }
