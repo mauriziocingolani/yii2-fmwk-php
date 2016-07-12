@@ -8,7 +8,7 @@ use yii\base\Object;
  * Utilità per oggetti di classe DateTime.
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @version 1.0.1
+ * @version 1.0.2
  */
 class DateTime extends Object {
 
@@ -100,8 +100,13 @@ class DateTime extends Object {
         if ($diff == null)
             return null;
         $s = [];
-        if ($diff->d > 0)
-            $s[] = "{$diff->d}d";
+        if ($diff->d > 0) :
+            if ($diff->m > 0 || $diff->y > 0) :
+                $s[] = "{$diff->days}d";
+            else :
+                $s[] = "{$diff->d}d";
+            endif;
+        endif;
         if ($diff->h > 0)
             $s[] = "{$diff->h}h";
         if ($diff->i > 0)
