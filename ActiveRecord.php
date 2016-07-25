@@ -15,7 +15,7 @@ use yii\db\Exception;
  * 
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @version 1.0.3
+ * @version 1.0.4
  */
 abstract class ActiveRecord extends \yii\db\ActiveRecord {
 
@@ -33,14 +33,45 @@ abstract class ActiveRecord extends \yii\db\ActiveRecord {
      * @return string Paragrafo con informazioni di creazione e modifica
      */
     public function getCreatedUpdatedParagraph($isFemale = false) {
-        $s = '<p class="created">' .
-                'Creat' . ($isFemale ? 'a' : 'o') . ' il ' . date('d-m-Y', strtotime($this->Creato)) .
+        $s = 'Creat' . ($isFemale ? 'a' : 'o') . ' il ' . date('d-m-Y', strtotime($this->Creato)) .
                 " da <strong>{$this->creatore->UserName}</strong>";
         if ($this->Modificato)
-            $s .= '<br />' .
+            $s .= Html::tag('br') .
                     'Ultima modifica il ' . date('d-m-Y', strtotime($this->Modificato)) .
                     " da parte di <strong>{$this->modificatore->UserName}</strong>";
-        return $s . '</p>';
+        return Html::tag('p', $s, ['class' => 'created']);
+    }
+
+    /**
+     * Crea il blocco HTML standard coni dati di creazione/modifica e il pulsante di eliminazione:
+     * 
+     * &lt;p class=&quot;created&quot;&gt;Creat... il ... da &lt;strong&gt;...&lt;/strong&gt;&lt;/p&gt;<br />
+     * &lt;p&gt;<br />
+     * &lt;form id=&quot;...-delete-form&quot; action=&quot;...&quot; method=&quot;post&quot;&gt;<br />
+     * &lt;input type=&quot;hidden&quot; name=&quot;_csrf&quot; value=&quot;...&quot;&gt;<br />
+     * &lt;input type=&quot;hidden&quot; name=&quot;Delete...[...]&quot; value=&quot;...&quot;&gt;<br />
+     * &lt;a class=&quot;btn btn-danger&quot; href=&quot;/&quot;&gt;&lt;i class=&quot;fa fa-trash-o&quot;&gt;&lt;/i&gt; ...&lt;/a&gt;<br />
+     * &lt;/form&gt;<br />
+     * &lt;/p&gt;
+     * 
+     * La form ha id "{nome classe minuscolo}-delete-form", il campo nascosto ha nome "{nome classe}[{nome campo pk}]"
+     * e valore della chiave primaria del modello.
+     * 
+     * @param string $pkField Nome del campo pk del modello
+     * @param string $buttonLabel Testo del pulsante di eliminazione
+     * @param boolean $isFemale True per indicare che l'oggetto è al femminile
+     * @return string Blocco HTML
+     */
+    public function getCreatedUpdatedBlock($pkField, $buttonLabel, $isFemale = false) {
+        if ($this->isNewRecord)
+            return;
+        return $this->getCreatedUpdatedParagraph($isFemale) . \PHP_EOL .
+                Html::beginTag('p') . \PHP_EOL .
+                Html::beginForm('', 'post', ['id' => strtolower($this->formName()) . '-delete-form']) . \PHP_EOL . # form
+                Html::hiddenInput("Delete{$this->formName()}[$pkField]", $this->$pkField) . \PHP_EOL . # input nascosto con id
+                Html::faa('trash-o', $buttonLabel, ['/'], ['class' => 'btn btn-danger']) . \PHP_EOL . # pulsante eliminazione
+                Html::endForm() . \PHP_EOL .
+                Html::endTag('p');
     }
 
     /**
