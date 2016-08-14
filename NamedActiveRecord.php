@@ -2,7 +2,7 @@
 
 namespace mauriziocingolani\yii2fmwkphp;
 
-use yii\db\ActiveRecord;
+use mauriziocingolani\yii2fmwkphp\ActiveRecord;
 
 /**
  * Rappresenta una tabella di database con nome e cognome.
@@ -13,7 +13,7 @@ use yii\db\ActiveRecord;
  * @property string $LastName Cognome della persona
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @version 1.0.2
+ * @version 1.0.3
  */
 abstract class NamedActiveRecord extends ActiveRecord {
 
