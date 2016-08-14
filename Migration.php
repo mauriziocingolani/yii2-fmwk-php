@@ -8,7 +8,7 @@ use yii\db\Schema;
  * Aggiunge costanti e funzionalità alla classe yii\db\Migration.
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @version 1.0.5
+ * @version 1.0.6
  */
 class Migration extends \yii\db\Migration {
 
@@ -45,6 +45,10 @@ class Migration extends \yii\db\Migration {
     }
 
     public static function TableOptions($engine = 'InnoDB', $charset = 'utf8', $collate = 'utf8_unicode_ci') {
+        return "CHARACTER SET $charset COLLATE $collate ENGINE=$engine";
+    }
+
+    public static function TableOptionsLatin($engine = 'InnoDB', $charset = 'latin1', $collate = 'latin1_swedish_ci') {
         return "CHARACTER SET $charset COLLATE $collate ENGINE=$engine";
     }
 
