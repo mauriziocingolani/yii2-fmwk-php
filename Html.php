@@ -6,7 +6,7 @@ namespace mauriziocingolani\yii2fmwkphp;
  * Estende la classe yii\helpers\Html aggiungendo metodi e funzionalità.
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @version 1.0.1
+ * @version 1.0.2
  */
 class Html extends \yii\helpers\Html {
 
@@ -53,6 +53,14 @@ class Html extends \yii\helpers\Html {
     public static function famailto($icon, $text = null, $email = null, array $options = array()) {
         $t = '<i class="fa fa-' . $icon . '"></i>' . ($text && strlen($text) > 0 ? ' ' . $text : '');
         return self::mailto($t, $email, $options);
+    }
+
+    /**
+     * Genera un tag <input> di tipo hidden con il token csfr da inserire nelle form "manuali".
+     * @return string Tag generato
+     */
+    public static function csrfInput() {
+        return self::hiddenInput('_csrf', Yii::$app->getRequest()->getCsrfToken());
     }
 
 }
