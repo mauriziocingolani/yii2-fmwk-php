@@ -2,6 +2,8 @@
 
 namespace mauriziocingolani\yii2fmwkphp;
 
+use Yii;
+
 /**
  * Estende la classe yii\helpers\Html aggiungendo metodi e funzionalità.
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
