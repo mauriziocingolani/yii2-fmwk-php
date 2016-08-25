@@ -10,7 +10,7 @@ use yii\helpers\Url;
  * Estende la classe View aggiungendo alcune funzionalità.
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @version 1.0.7
+ * @version 1.0.8
  */
 class View extends \yii\web\View {
 
@@ -19,6 +19,9 @@ class View extends \yii\web\View {
 
     /** Descrizione della pagina. */
     public $pageDescription;
+    
+    /** Keywords della pagina. */
+    public $pageKeywords;
 
     /**
      * Imposta il titolo della pagina secondo i seguenti criteri:

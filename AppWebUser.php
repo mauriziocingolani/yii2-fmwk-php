@@ -57,7 +57,7 @@ class AppWebUser extends User {
     /**
      * All'avvio della simulazione registra nei parametri di sessione <code>user.simulator</code> e <code>user.simulator_session</code>
      * i dati prima del logout e quindi del login come utente da simulare. Questi dati verranno utilizzati, oltre che per 
-     * capire se è in corso una simulazione, anche per identificareil record della tabella dei login da aggiornare in caso
+     * capire se è in corso una simulazione, anche per identificare il record della tabella dei login da aggiornare in caso
      * di logout durante la simulazione, dato che in quel caso si l'ID utente che l'ID di sessione non corrispondono a
      * quelli salvati al momento del login.
      * @param int $simulatorID ID dell'utente che sta simulando
