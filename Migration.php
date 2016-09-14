@@ -8,7 +8,7 @@ use yii\db\Schema;
  * Aggiunge costanti e funzionalità alla classe yii\db\Migration.
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @version 1.0.6
+ * @version 1.0.7
  */
 class Migration extends \yii\db\Migration {
 
@@ -130,6 +130,15 @@ class Migration extends \yii\db\Migration {
      */
     protected static function typeUnsignedSmallInteger($notNull = false) {
         return Schema::TYPE_SMALLINT . ' UNSIGNED' . ($notNull === true ? ' NOT NULL' : '');
+    }
+
+    /**
+     * Restituisce la definizione di tipo per un intero tiny senza segno (eventualmente NOT NULL).
+     * @param boolean $notNull True per richiedere che il campo sia NOT NULL
+     * @return string Definizione di tipo per intero tiny senza segno
+     */
+    protected static function typeUnsignedTinyInteger($notNull = false) {
+        return 'TINYINT UNSIGNED' . ($notNull === true ? ' NOT NULL' : '');
     }
 
     /**
