@@ -10,7 +10,7 @@ namespace mauriziocingolani\yii2fmwkphp;
  * @property string $version
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @version 1.0.8
+ * @version 1.0.9
  */
 class Config extends \yii\base\Object {
 
@@ -210,7 +210,7 @@ class Config extends \yii\base\Object {
         $this->_components['telegram'] = require $this->_configFolder . 'telegram.php';
         return $this;
     }
-    
+
     /**
      * Aggiunge il componente per la visualizzazione dei tweet relativi all'applicazione.
      * I parametri di configurazione vengono caricati dal file 'twitter.php' (presente nella cartella dei files di configurazione).
@@ -269,13 +269,15 @@ class Config extends \yii\base\Object {
     /**
      * Aggiunge il modulo utente, con le classi di gestione database e le funzionalità base (login, logout,
      * gestione ruoli e utenti).
-     * @param string $class Classe che rappresenta un utente dell'applicazione (default 'app\modules\user\User')
+     * Di default la classe che rappresenta un utente dell'applicazione è 'app\modules\user\User'; per modificarla
+     * si usa l'elemento 'class' dell'array di configurazione.
+     * @param array $options Opzioni di configurazione 
      * @return \mauriziocingolani\yii2fmwkphp\Config Oggetto corrente (per concatenamento)
      */
-    public function addUserModule($class = 'app\modules\user\User') {
-        $this->_modules['user'] = [
-            'class' => $class,
-        ];
+    public function addUserModule($options = array()) {
+        if (!isset($options['class']))
+            $options['class'] = 'app\modules\user\User';
+        $this->_modules['user'] = $options;
         return $this;
     }
 
