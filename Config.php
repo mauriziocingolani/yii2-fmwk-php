@@ -10,7 +10,7 @@ namespace mauriziocingolani\yii2fmwkphp;
  * @property string $version
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @version 1.0.9
+ * @version 1.0.10
  */
 class Config extends \yii\base\Object {
 
@@ -223,14 +223,15 @@ class Config extends \yii\base\Object {
 
     /**
      * Aggiunge il componente per la gestione del login utente. Presuppone che esistano le classi app\components\AppUser
-     * (sottoclasse di yii\web\User) e app\modules\user\models\User.
+     * (sottoclasse di yii\web\User) e app\modules\user\models\User oppure app\modules\usernew\models\User.
+     * @param boolean $new True per utilizzare il nuovo modulo
      * @return \mauriziocingolani\yii2fmwkphp\Config Oggetto corrente (per concatenamento)
      */
-    public function addUserComponent() {
+    public function addUserComponent($new = false) {
         $this->_components['user'] = [
             'class' => 'app\components\AppUser',
             'enableAutoLogin' => true,
-            'identityClass' => 'app\modules\user\models\User',
+            'identityClass' => ($new ? 'app\modules\usernew\models\User' : 'app\modules\user\models\User'),
             'loginUrl' => ['/login'],
         ];
         return $this;
@@ -272,12 +273,13 @@ class Config extends \yii\base\Object {
      * Di default la classe che rappresenta un utente dell'applicazione è 'app\modules\user\User'; per modificarla
      * si usa l'elemento 'class' dell'array di configurazione.
      * @param array $options Opzioni di configurazione 
+     * @param boolean $new True per utilizzare il nuovo modulo
      * @return \mauriziocingolani\yii2fmwkphp\Config Oggetto corrente (per concatenamento)
      */
-    public function addUserModule($options = array()) {
+    public function addUserModule($options = array(), $new = false) {
         if (!isset($options['class']))
-            $options['class'] = 'app\modules\user\User';
-        $this->_modules['user'] = $options;
+            $options['class'] = $new ? 'app\modules\usernew\UserNew' : 'app\modules\user\User';
+        $this->_modules[$new ? 'usernew' : 'user'] = $options;
         return $this;
     }
 
