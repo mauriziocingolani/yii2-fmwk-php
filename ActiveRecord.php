@@ -15,7 +15,7 @@ use yii\db\Exception;
  * 
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @version 1.0.4
+ * @version 1.0.5
  */
 abstract class ActiveRecord extends \yii\db\ActiveRecord {
 
@@ -146,12 +146,14 @@ abstract class ActiveRecord extends \yii\db\ActiveRecord {
      * ad esempio nel caso in cui si voglia popolare una select. 
      * @param string $field Nome del campo ENUM
      * @param boolean $useValuesAsKeys True per restituire un array con chiavi uguali ai valori
+     * @param \yii\db\Connection $connection Eventuale connessione diversa da quella principale
      * @return mixed Lista dei valori
      */
-    protected static function GetEnumValues($field, $useValuesAsKeys = false) {
+    protected static function GetEnumValues($field, $useValuesAsKeys = false, $connection = null) {
         try {
             $data = [];
-            $record = Yii::$app->db->createCommand('SHOW COLUMNS FROM ' . static::tableName() . ' WHERE Field =:field', ['field' => $field])->queryOne();
+            $connection = $connection ? $connection : Yii::$app->db;
+            $record = $connection->createCommand('SHOW COLUMNS FROM ' . static::tableName() . ' WHERE Field =:field', ['field' => $field])->queryOne();
             preg_match('/^enum\((.*)\)$/', $record['Type'], $matches);
             foreach (explode(',', $matches[1]) as $value) {
                 $d = trim($value, "'");
