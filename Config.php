@@ -10,7 +10,7 @@ namespace mauriziocingolani\yii2fmwkphp;
  * @property string $version
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @version 1.0.10
+ * @version 1.0.11
  */
 class Config extends \yii\base\Object {
 
@@ -222,16 +222,17 @@ class Config extends \yii\base\Object {
     }
 
     /**
-     * Aggiunge il componente per la gestione del login utente. Presuppone che esistano le classi app\components\AppUser
-     * (sottoclasse di yii\web\User) e app\modules\user\models\User oppure app\modules\usernew\models\User.
-     * @param boolean $new True per utilizzare il nuovo modulo
+     * Aggiunge il componente per la gestione del login utente. 
+     * Presuppone che esista la classie app\components\AppUser se non viene specificato il 
+     * parametro $identityClass.
+     * @param string $identityClass Nome della classe che rappresenta gli utenti
      * @return \mauriziocingolani\yii2fmwkphp\Config Oggetto corrente (per concatenamento)
      */
-    public function addUserComponent($new = false) {
+    public function addUserComponent($identityClass = 'app\modules\user\models\User') {
         $this->_components['user'] = [
             'class' => 'app\components\AppUser',
             'enableAutoLogin' => true,
-            'identityClass' => ($new ? 'app\modules\usernew\models\User' : 'app\modules\user\models\User'),
+            'identityClass' => $identityClass,
             'loginUrl' => ['/login'],
         ];
         return $this;
