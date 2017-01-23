@@ -10,7 +10,7 @@ namespace mauriziocingolani\yii2fmwkphp;
  * @property string $version
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @version 1.0.11
+ * @version 1.0.12
  */
 class Config extends \yii\base\Object {
 
@@ -91,7 +91,7 @@ class Config extends \yii\base\Object {
         if (YII_DEBUG)
             $this->_modules['debug'] = [
                 'class' => 'yii\debug\Module',
-                'allowedIPs' => ['*']
+                'allowedIPs' => ['*'],
             ];
         if (OFFLINE)
             $this->_catchAll = [
@@ -354,6 +354,18 @@ class Config extends \yii\base\Object {
      */
     public function setCatchAll(array $catchAll) {
         $this->_catchAll = $catchAll;
+        return $this;
+    }
+
+    /**
+     * Imposta la proprietà 'allowedIps' del modulo Debug, in modo da impedire la 
+     * visualizzazione della barra di debug agli utenti non autorizzati.
+     * @param array $ips Lista degli ip abilitati a vedere la barra di debug
+     * @return \mauriziocingolani\yii2fmwkphp\Config Oggetto corrente (per concatenamento)
+     */
+    public function setDebugIps(array $ips) {
+        if (isset($this->_modules['debug']))
+            $this->_modules['debug']['allowedIPs'] = $ips;
         return $this;
     }
 
