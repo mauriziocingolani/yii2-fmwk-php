@@ -10,7 +10,7 @@ namespace mauriziocingolani\yii2fmwkphp;
  * @property string $version
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @version 1.0.12
+ * @version 1.0.13
  */
 class Config extends \yii\base\Object {
 
@@ -68,6 +68,7 @@ class Config extends \yii\base\Object {
                 'errorAction' => 'site/error',
             ],
             'request' => [
+                'class' => Request::className(),
                 'cookieValidationKey' => require $this->_configFolder . 'cookies.php',
             ],
             'urlManager' => [
