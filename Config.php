@@ -10,7 +10,7 @@ namespace mauriziocingolani\yii2fmwkphp;
  * @property string $version
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @version 1.0.13
+ * @version 1.0.14
  */
 class Config extends \yii\base\Object {
 
@@ -235,6 +235,27 @@ class Config extends \yii\base\Object {
             'enableAutoLogin' => true,
             'identityClass' => $identityClass,
             'loginUrl' => ['/login'],
+        ];
+        return $this;
+    }
+
+    /* Renderers */
+
+    /**
+     * Aggiunge al componente 'view' il renderer per Twig.
+     * @return \mauriziocingolani\yii2fmwkphp\Config Oggetto corrente (per concatenamento)
+     */
+    public function addTwigRenderer() {
+        $this->_components['view']['renderers']['twig'] = [
+            'class' => 'yii\twig\ViewRenderer',
+            'cachePath' => '@runtime/Twig/cache',
+            'options' => [
+                'auto_reload' => true,
+            ],
+            'globals' => [
+                'html' => '\yii\helpers\Html',
+            ],
+            'uses' => ['yii\bootstrap'],
         ];
         return $this;
     }
