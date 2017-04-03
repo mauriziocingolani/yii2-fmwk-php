@@ -10,7 +10,7 @@ namespace mauriziocingolani\yii2fmwkphp;
  * @property string $version
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @version 1.0.14
+ * @version 1.0.15
  */
 class Config extends \yii\base\Object {
 
@@ -199,6 +199,16 @@ class Config extends \yii\base\Object {
                 'sessionTable' => is_array($params) && isset($params['sessionTable']) ? $params['sessionTable'] : 'YiiSessions',
                 'timeout' => is_array($params) && isset($params['timeout']) ? $params['timeout'] : 1440,
             ];
+        return $this;
+    }
+
+    /**
+     * Aggiunge il componente per l'invio di SMS tramite servizio sms-mobile.it..
+     * I parametri di configurazione vengono caricati dal file 'smsmobile.php' (presente nella cartella dei files di configurazione).
+     * @return \mauriziocingolani\yii2fmwkphp\Config Oggetto corrente (per concatenamento)
+     */
+    public function addSmsMobileComponent() {
+        $this->_components['smsmobile'] = require $this->_configFolder . 'smsmobile.php';
         return $this;
     }
 
