@@ -10,7 +10,7 @@ namespace mauriziocingolani\yii2fmwkphp;
  * @property string $version
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @version 1.0.15
+ * @version 1.0.16
  */
 class Config extends \yii\base\Object {
 
@@ -378,6 +378,18 @@ class Config extends \yii\base\Object {
     }
 
     /* Setters */
+
+    /**
+     * Assegna gli alias specificati;
+     * @param array $alias Array di coppie alias-percorso
+     * @return \mauriziocingolani\yii2fmwkphp\Config Oggetto corrente (per concatenamento)
+     */
+    public function setAlias(array $alias) {
+        foreach ($alias as $alias => $path) :
+            $this->_aliases[$alias] = $path;
+        endforeach;
+        return $this;
+    }
 
     /**
      * Imposta la route (controller/action) che intercetta tutte le chimate.
