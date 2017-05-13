@@ -10,7 +10,7 @@ use yii\helpers\Url;
  * Estende la classe View aggiungendo alcune funzionalità.
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @version 1.0.8
+ * @version 1.0.9
  */
 class View extends \yii\web\View {
 
@@ -19,7 +19,7 @@ class View extends \yii\web\View {
 
     /** Descrizione della pagina. */
     public $pageDescription;
-    
+
     /** Keywords della pagina. */
     public $pageKeywords;
 
@@ -69,16 +69,6 @@ class View extends \yii\web\View {
         endif;
     }
 
-    /** Il titolo della pagina viene impostato secondo i seguenti criteri:
-     * <ul>
-     * 
-     * </ul>
-     * @param string $separator Carattere di separazione tra nome del sito/applicazione e pagina
-     */
-    private function _setTitle($separator = '-') {
-        
-    }
-
     /**
      * Aggiunge un breadcrumb alla catena, con i senza link (in base al parametro {@link $url}.
      * Se il parametro {@link $text} non è assegnato viene utilizzata la proprietà {@link View::title}.
@@ -94,7 +84,7 @@ class View extends \yii\web\View {
             $bc = $text ? $text : $this->title;
         endif;
         $this->params['breadcrumbs'][] = $bc;
-        return $bc;
+        return $text ? $text : $this->title;
     }
 
     /**
