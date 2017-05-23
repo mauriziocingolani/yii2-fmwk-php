@@ -22,7 +22,6 @@ class FiscalCodeValidator extends Validator {
     }
 
     public function validateAttribute($model, $attribute) {
-        $this->addError($model, $attribute, $this->message);
         if (!preg_match($this->_regex, $model->$attribute))
             $this->addError($model, $attribute, $this->message);
     }
