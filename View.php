@@ -10,7 +10,7 @@ use yii\helpers\Url;
  * Estende la classe View aggiungendo alcune funzionalità.
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @version 1.0.9
+ * @version 1.0.10
  */
 class View extends \yii\web\View {
 
@@ -131,6 +131,21 @@ class View extends \yii\web\View {
      */
     public function registerShowPasswordScript($checkboxId = 'reveal-password', $passwordFieldId = 'loginform-password') {
         $this->registerJs("jQuery('#$checkboxId').change(function(){jQuery('#$passwordFieldId').attr('type',this.checked?'text':'password');})");
+    }
+
+    /**
+     * Restituisce l'array di configurazione per il pager di default della Gridview, con i quattro pulsanti (<<,<,>,>>) e
+     * l'allineamento a destra.
+     * @return array Pager per la Gridview
+     */
+    public function getGridviewPager() {
+        return [
+            'firstPageLabel' => '&lt;&lt;',
+            'prevPageLabel' => 'Prec.',
+            'nextPageLabel' => 'Succ.',
+            'lastPageLabel' => '&gt;&gt;',
+            'options' => ['class' => 'pagination', 'style' => 'float: right;'],
+        ];
     }
 
 }
