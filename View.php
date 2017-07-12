@@ -10,7 +10,7 @@ use yii\helpers\Url;
  * Estende la classe View aggiungendo alcune funzionalità.
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @version 1.0.10
+ * @version 1.0.11
  */
 class View extends \yii\web\View {
 
@@ -146,6 +146,15 @@ class View extends \yii\web\View {
             'lastPageLabel' => '&gt;&gt;',
             'options' => ['class' => 'pagination', 'style' => 'float: right;'],
         ];
+    }
+
+    /**
+     * Restituisce il tag <div> con il sommario della Gridview nel formato "{$objsName} {begin}-{end} di {totalCount}".
+     * @param string $objsName Nome degli oggetti contenuti
+     * @return string Sommario per la Gridview
+     */
+    public function getGridviewSummary($objsName) {
+        return Html::tag('div', $objsName . ' <strong>{begin}-{end}</strong> di <strong>{totalCount}</strong>', ['style' => 'text-align: right']);
     }
 
 }
