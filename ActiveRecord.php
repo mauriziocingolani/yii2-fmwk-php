@@ -115,7 +115,7 @@ abstract class ActiveRecord extends \yii\db\ActiveRecord {
      * @return array Configurazione del behavior
      */
     public function getTimestampBehavior($createdField = 'Creato', $updatedField = 'Modificato', $expression = null) {
-        ['class' => TimestampBehavior::className(),
+        return ['class' => TimestampBehavior::className(),
             'attributes' => [
                 self::EVENT_BEFORE_INSERT => [$createdField],
                 self::EVENT_BEFORE_UPDATE => [$updatedField],
