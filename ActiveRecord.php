@@ -4,6 +4,7 @@ namespace mauriziocingolani\yii2fmwkphp;
 
 use Yii;
 use yii\behaviors\BlameableBehavior;
+use yii\behaviors\SluggableBehavior;
 use yii\behaviors\TimestampBehavior;
 use yii\db\Exception;
 use yii\db\Expression;
@@ -18,7 +19,7 @@ use yii\db\Expression;
  * 
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @version 1.0.7
+ * @version 1.0.8
  */
 abstract class ActiveRecord extends \yii\db\ActiveRecord {
 
@@ -89,6 +90,19 @@ abstract class ActiveRecord extends \yii\db\ActiveRecord {
                 self::EVENT_BEFORE_INSERT => $createdField,
                 self::EVENT_BEFORE_UPDATE => $updatedField,
             ],
+        ];
+    }
+
+    /**
+     * Restituisce l'array con i parametri di configurazione per SluggableBehavior.
+     * @param mixed $attributes Nome del campo (o array con i nomi) da cui creare lo slug
+     * @param string $slugAttribute Nome del campo con lo slug
+     * @return array Configurazione del behavior
+     */
+    public function getSluggableBehavior($attributes, $slugAttribute) {
+        return ['class' => SluggableBehavior::className(),
+            'attribute' => $attributes,
+            'slugAttribute' => $slugAttribute,
         ];
     }
 
