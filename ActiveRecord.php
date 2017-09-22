@@ -99,10 +99,11 @@ abstract class ActiveRecord extends \yii\db\ActiveRecord {
      * @param string $slugAttribute Nome del campo con lo slug
      * @return array Configurazione del behavior
      */
-    public function getSluggableBehavior($attributes, $slugAttribute) {
+    public function getSluggableBehavior($attributes, $slugAttribute, $ensureUnique = false) {
         return ['class' => SluggableBehavior::className(),
             'attribute' => $attributes,
             'slugAttribute' => $slugAttribute,
+            'ensureUnique' => $ensureUnique,
         ];
     }
 
