@@ -3,7 +3,10 @@
 namespace mauriziocingolani\yii2fmwkphp;
 
 use Yii;
+use yii\behaviors\BlameableBehavior;
+use yii\behaviors\TimestampBehavior;
 use yii\db\Exception;
+use yii\db\Expression;
 
 /**
  * Estende yii\db\ActiveRecord aggiungendo funzionalità e utilità.
@@ -15,7 +18,7 @@ use yii\db\Exception;
  * 
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @version 1.0.6
+ * @version 1.0.7
  */
 abstract class ActiveRecord extends \yii\db\ActiveRecord {
 
@@ -72,6 +75,39 @@ abstract class ActiveRecord extends \yii\db\ActiveRecord {
                 Html::faa('trash-o', $buttonLabel, ['/'], ['class' => 'btn btn-danger']) . \PHP_EOL . # pulsante eliminazione
                 Html::endForm() . \PHP_EOL .
                 Html::endTag('p');
+    }
+
+    /**
+     * Restituisce l'array con i parametri di configurazione per BlameableBehavior.
+     * @param string $createdField Nome del campo da aggiornare in seguito alla creazione
+     * @param string $updatedField Nome del campo da aggiornare in seguito alla modifica
+     * @return array Configurazione del behavior
+     */
+    public function getBlameableBehavior($createdField, $updatedField) {
+        return ['class' => BlameableBehavior::className(),
+            'attributes' => [
+                self::EVENT_BEFORE_INSERT => 'CreatoDa',
+                self::EVENT_BEFORE_UPDATE => 'ModificatoDa',
+            ],
+        ];
+    }
+
+    /**
+     * Restituisce l'array con i parametri di configurazione per TimestampBehavior.
+     * Di default assegna ai campi il valore "NOW()".
+     * @param string $createdField Nome del campo da aggiornare in seguito alla creazione
+     * @param string $updatedField Nome del campo da aggiornare in seguito alla modifica
+     * @param string $expression (opzionale) Valore da assegnare al campo
+     * @return array Configurazione del behavior
+     */
+    public function getTimestampBehavior($createdField, $updatedField, $expression = null) {
+        ['class' => TimestampBehavior::className(),
+            'attributes' => [
+                self::EVENT_BEFORE_INSERT => ['Creato'],
+                self::EVENT_BEFORE_UPDATE => ['Modificato'],
+            ],
+            'value' => $expression ? $expression : new Expression('NOW()'),
+        ];
     }
 
     /**
