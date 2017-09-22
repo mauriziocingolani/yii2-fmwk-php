@@ -83,7 +83,7 @@ abstract class ActiveRecord extends \yii\db\ActiveRecord {
      * @param string $updatedField Nome del campo da aggiornare in seguito alla modifica
      * @return array Configurazione del behavior
      */
-    public function getBlameableBehavior($createdField = 'Creato', $updatedField = 'Modificato') {
+    public function getBlameableBehavior($createdField = 'CreatoDa', $updatedField = 'ModificatoDa') {
         return ['class' => BlameableBehavior::className(),
             'attributes' => [
                 self::EVENT_BEFORE_INSERT => $createdField,
@@ -100,7 +100,7 @@ abstract class ActiveRecord extends \yii\db\ActiveRecord {
      * @param string $expression (opzionale) Valore da assegnare al campo
      * @return array Configurazione del behavior
      */
-    public function getTimestampBehavior($createdField = 'CreatoDa', $updatedField = 'ModificatoDa', $expression = null) {
+    public function getTimestampBehavior($createdField = 'Creato', $updatedField = 'Modificato', $expression = null) {
         ['class' => TimestampBehavior::className(),
             'attributes' => [
                 self::EVENT_BEFORE_INSERT => [$createdField],
