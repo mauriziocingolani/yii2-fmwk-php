@@ -19,7 +19,7 @@ use yii\db\Expression;
  * 
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @version 1.0.8
+ * @version 1.0.9
  */
 abstract class ActiveRecord extends \yii\db\ActiveRecord {
 
@@ -70,7 +70,19 @@ abstract class ActiveRecord extends \yii\db\ActiveRecord {
         if ($this->isNewRecord)
             return;
         return $this->getCreatedUpdatedParagraph($isFemale) . \PHP_EOL .
-                Html::beginTag('p') . \PHP_EOL .
+                $this->getDeleteParagraph($pkField, $buttonLabel);
+    }
+
+    /**
+     * Crea il blocco HTML standard con il pulsante di eliminazione:
+     * @param string $pkField Nome del campo pk del modello
+     * @param string $buttonLabel Testo del pulsante di eliminazione
+     * @return string Blocco HTML
+     */
+    public function getDeleteParagraph($pkField, $buttonLabel) {
+        if ($this->isNewRecord)
+            return;
+        return Html::beginTag('p') . \PHP_EOL .
                 Html::beginForm('', 'post', ['id' => strtolower($this->formName()) . '-delete-form']) . \PHP_EOL . # form
                 Html::hiddenInput("Delete{$this->formName()}[$pkField]", $this->$pkField) . \PHP_EOL . # input nascosto con id
                 Html::faa('trash-o', $buttonLabel, ['/'], ['class' => 'btn btn-danger']) . \PHP_EOL . # pulsante eliminazione
