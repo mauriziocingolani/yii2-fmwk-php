@@ -10,7 +10,7 @@ namespace mauriziocingolani\yii2fmwkphp;
  * @property string $version
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @version 1.0.16
+ * @version 1.0.17
  */
 class Config extends \yii\base\Object {
 
@@ -296,6 +296,7 @@ class Config extends \yii\base\Object {
             'googleAnalytics' => [
                 'id' => $this->getParam('googleAnalytics', 'id'),
                 'domain' => $this->getParam('googleAnalytics', 'domain'),
+                'anonymizeIp' => $this->getParam('googleAnalytics', 'anonymizeIp'),
             ],
         ];
     }
