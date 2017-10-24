@@ -8,6 +8,8 @@ use yii\behaviors\SluggableBehavior;
 use yii\behaviors\TimestampBehavior;
 use yii\db\Exception;
 use yii\db\Expression;
+use yii\helpers\StringHelper;
+use yii\web\NotFoundHttpException;
 
 /**
  * Estende yii\db\ActiveRecord aggiungendo funzionalità e utilità.
@@ -19,7 +21,7 @@ use yii\db\Expression;
  * 
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @version 1.0.9
+ * @version 1.0.10
  */
 abstract class ActiveRecord extends \yii\db\ActiveRecord {
 
@@ -201,6 +203,31 @@ abstract class ActiveRecord extends \yii\db\ActiveRecord {
     public static function ItalianToMysqlTime($string) {
         $split = preg_split('/[ ]/', $string);
         return $split[1] . (strlen($split[1]) < 6 ? ':00' : '');
+    }
+
+    /**
+     * Restituisce una nuova istanza della classe, oppure l'istanza corrispondente al record
+     * con chiave primaria indicata. Eventualmente popola le istanze delle relazioni indicate
+     * nel parametro $with.
+     * In caso di record inesistente viene sollevata una \yii\web\NotFoundHttpException che
+     * di default riporta il messaggio "{nome classe} inesistente".
+     * @param integer $pk Chiave primaria del record da trovare
+     * @param array $with Relazioni da popolare
+     * @param string $missingMessage Messaggio da associare all'eccezione sollevata in caso di record inesistente.
+     * @return \static
+     * @throws NotFoundHttpException Se non esiste un record con la chiave primaria indicata
+     */
+    public static function FindByPk($pk, array $with = null, $missingMessage = null) {
+        if ($pk) :
+            $query = static::find()->where(static::primaryKey()[0] . '=:id', ['id' => $pk]);
+            if ($with)
+                $query->with($with);
+            $model = $query->one();
+            if (!$model)
+                throw new NotFoundHttpException($missingMessage ? $missingMessage : StringHelper::basename(static::className()) . ' inesistente.');
+            return $model;
+        endif;
+        return new static;
     }
 
     /**
