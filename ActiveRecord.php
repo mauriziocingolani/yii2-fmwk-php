@@ -10,6 +10,7 @@ use yii\db\Exception;
 use yii\db\Expression;
 use yii\helpers\StringHelper;
 use yii\web\NotFoundHttpException;
+use rmrevin\yii\fontawesome\FA;
 
 /**
  * Estende yii\db\ActiveRecord aggiungendo funzionalità e utilità.
