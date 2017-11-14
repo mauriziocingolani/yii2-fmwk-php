@@ -21,7 +21,7 @@ use yii\web\NotFoundHttpException;
  * 
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @version 1.0.10
+ * @version 1.0.11
  */
 abstract class ActiveRecord extends \yii\db\ActiveRecord {
 
@@ -62,32 +62,40 @@ abstract class ActiveRecord extends \yii\db\ActiveRecord {
      * 
      * La form ha id "{nome classe minuscolo}-delete-form", il campo nascosto ha nome "{nome classe}[{nome campo pk}]"
      * e valore della chiave primaria del modello.
+     * Se viene specificato il parametro $confirmText, il link di eliminazione è in realtà un pulsante di submit della form,
+     * previa richiesta di conferma. Questo rende inutile il codice Javascript per gestire il submit della form.
      * 
      * @param string $pkField Nome del campo pk del modello
      * @param string $buttonLabel Testo del pulsante di eliminazione
      * @param boolean $isFemale True per indicare che l'oggetto è al femminile
+     * @param string $confirmText Eventuale testo di conferma per il pulsante di eliminazione
      * @return string Blocco HTML
      */
-    public function getCreatedUpdatedBlock($pkField, $buttonLabel, $isFemale = false) {
+    public function getCreatedUpdatedBlock($pkField, $buttonLabel, $isFemale = false, $confirmText = null) {
         if ($this->isNewRecord)
             return;
         return $this->getCreatedUpdatedParagraph($isFemale) . \PHP_EOL .
-                $this->getDeleteParagraph($pkField, $buttonLabel);
+                $this->getDeleteParagraph($pkField, $buttonLabel, $confirmText);
     }
 
     /**
-     * Crea il blocco HTML standard con il pulsante di eliminazione:
+     * Crea il blocco HTML standard con il pulsante di eliminazione.
+     * Se è presente il parametro $confirmText, allora invece di un semplice link
+     * viene inserito un pulsante di submit con il messaggio di conferma.
      * @param string $pkField Nome del campo pk del modello
      * @param string $buttonLabel Testo del pulsante di eliminazione
+     * @prams string $confirmText Testo dell'alert di conferma (opzionale)
      * @return string Blocco HTML
      */
-    public function getDeleteParagraph($pkField, $buttonLabel) {
+    public function getDeleteParagraph($pkField, $buttonLabel, $confirmText = null) {
         if ($this->isNewRecord)
             return;
         return Html::beginTag('p') . \PHP_EOL .
                 Html::beginForm('', 'post', ['id' => strtolower($this->formName()) . '-delete-form']) . \PHP_EOL . # form
                 Html::hiddenInput("Delete{$this->formName()}[$pkField]", $this->$pkField) . \PHP_EOL . # input nascosto con id
-                Html::faa('trash-o', $buttonLabel, ['/'], ['class' => 'btn btn-danger']) . \PHP_EOL . # pulsante eliminazione
+                ($confirmText ?
+                Html::submitButton(FA::icon('trash-o') . ' ' . $buttonLabel, ['class' => 'btn btn-danger', 'data-confirm' => $confirmText]) :
+                Html::faa('trash-o', $buttonLabel, ['/'], ['class' => 'btn btn-danger'])) . \PHP_EOL . # pulsante eliminazione
                 Html::endForm() . \PHP_EOL .
                 Html::endTag('p');
     }
