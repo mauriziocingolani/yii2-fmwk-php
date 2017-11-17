@@ -2,6 +2,8 @@
 
 namespace mauriziocingolani\yii2fmwkphp;
 
+use Yii;
+
 /**
  * @property array $catchAll
  * @property string $language
@@ -10,7 +12,7 @@ namespace mauriziocingolani\yii2fmwkphp;
  * @property string $version
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @version 1.0.17
+ * @version 1.0.18
  */
 class Config extends \yii\base\Object {
 
@@ -25,6 +27,7 @@ class Config extends \yii\base\Object {
     private $_language;
     private $_modules;
     private $_name;
+    private $_onBeforeRequest;
     private $_params;
     private $_sourceLanguage;
     private $_timeZone;
@@ -338,7 +341,7 @@ class Config extends \yii\base\Object {
      * @return array Array di configurazione
      */
     public function getConfig() {
-        return [
+        $conf = [
             # required
             'id' => $this->_id,
             'basePath' => $this->_basePath,
@@ -356,6 +359,9 @@ class Config extends \yii\base\Object {
             'params' => $this->_params,
             'catchAll' => $this->_catchAll,
         ];
+        if ($this->_onBeforeRequest)
+            $conf['on beforeRequest'] = $this->_onBeforeRequest;
+        return $conf;
     }
 
     /**
@@ -415,6 +421,19 @@ class Config extends \yii\base\Object {
     }
 
     /**
+     * Assegna a EVENT_BEFORE_REQUEST una funzione che ridirige su 
+     * https in caso di connessioni non sicure.
+     */
+    public function setHttps() {
+        $this->setOnBeforeRequest(function($event) {
+            if (!Yii::$app->request->isSecureConnection) {
+                Yii::$app->getResponse()->redirect(str_replace('http:', 'https:', Yii::$app->request->getAbsoluteUrl()));
+                Yii::$app->end();
+            }
+        });
+    }
+
+    /**
      * Imposta il linguaggio dell'applicazione.
      * @param string $language Valore della proprietà {@link $language}
      * @return \mauriziocingolani\yii2fmwkphp\Config Oggetto corrente (per concatenamento)
@@ -432,6 +451,14 @@ class Config extends \yii\base\Object {
     public function setName($name) {
         $this->_name = $name;
         return $this;
+    }
+
+    /**
+     * Imposta EVENT_BEFORE_REQUEST con la funzione indicata.
+     * @param callable $function Funzione da eseguire
+     */
+    public function setOnBeforeRequest(callable $function) {
+        $this->_onBeforeRequest = $function;
     }
 
     /**
