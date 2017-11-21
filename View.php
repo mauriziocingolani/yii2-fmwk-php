@@ -10,7 +10,7 @@ use yii\helpers\Url;
  * Estende la classe View aggiungendo alcune funzionalità.
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @version 1.0.11
+ * @version 1.0.12
  */
 class View extends \yii\web\View {
 
@@ -155,6 +155,20 @@ class View extends \yii\web\View {
      */
     public function getGridviewSummary($objsName) {
         return Html::tag('div', $objsName . ' <strong>{begin}-{end}</strong> di <strong>{totalCount}</strong>', ['style' => 'text-align: right']);
+    }
+
+    /**
+     * Fornisce la stringa template da utilizzare per un singolo campo su una riga.
+     * Il campo viene racchiuso in una riga con classe "col-sm-x" se il parametro fornito
+     * è di tipo intero, altrimenti con la classe specificata se è una stringa.
+     * @param mixed $nColumns Numero di colonne (sm) oppure classe per la diov esterna
+     * @return string Template per il campo */
+    public function getFormFieldColumnTemplate($nColumns) {
+        if (is_string($nColumns)) :
+            return '{label} <div class="row"><div class="' . $nColumns . '">{input}{error}{hint}</div></div>';
+        elseif (is_integer($nColumns)) :
+            return '{label} <div class="row"><div class="col-sm-' . $nColumns . '">{input}{error}{hint}</div></div>';
+        endif;
     }
 
 }
