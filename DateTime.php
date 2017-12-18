@@ -8,7 +8,7 @@ use yii\base\Object;
  * Utilità per oggetti di classe DateTime.
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @version 1.0.2
+ * @version 1.0.3
  */
 class DateTime extends Object {
 
@@ -86,6 +86,15 @@ class DateTime extends Object {
      */
     public static function GetMonthNumber($monthString) {
         return array_search(strtolower($monthString), self::$_italianMonths);
+    }
+
+    /**
+     * Restituisce la lista dei nomi dei mesi (tutti minuscoli)
+     * @param boolean $indexed True per richiedere i numeri dei mesi (1-12) come chiavi dell'array
+     * @return array Nomi dei mesi (minuscoli)
+     */
+    public static function GetMonths($indexed = false) {
+        return $indexed ? self::$_italianMonths : array_values(self::$_italianMonths);
     }
 
     /**
