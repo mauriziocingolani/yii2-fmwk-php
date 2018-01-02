@@ -10,7 +10,7 @@ use yii\helpers\Url;
  * Estende la classe View aggiungendo alcune funzionalità.
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @version 1.0.12
+ * @version 1.0.13
  */
 class View extends \yii\web\View {
 
@@ -144,7 +144,7 @@ class View extends \yii\web\View {
             'prevPageLabel' => 'Prec.',
             'nextPageLabel' => 'Succ.',
             'lastPageLabel' => '&gt;&gt;',
-            'options' => ['class' => 'pagination', 'style' => 'float: right;'],
+            'options' => ['class' => 'pagination'],
         ];
     }
 
@@ -155,6 +155,14 @@ class View extends \yii\web\View {
      */
     public function getGridviewSummary($objsName) {
         return Html::tag('div', $objsName . ' <strong>{begin}-{end}</strong> di <strong>{totalCount}</strong>', ['style' => 'text-align: right']);
+    }
+
+    /**
+     * Restituisce la stringa di layout per posizionare il pager sulla destra.
+     * @return string Layout per la gridview
+     */
+    public function getGridviewLayout() {
+        return "{summary}\n{items}\n<div class='text-right'>{pager}</div>";
     }
 
     /**
