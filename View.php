@@ -10,7 +10,7 @@ use yii\helpers\Url;
  * Estende la classe View aggiungendo alcune funzionalità.
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @version 1.0.13
+ * @version 1.0.14
  */
 class View extends \yii\web\View {
 
@@ -177,6 +177,19 @@ class View extends \yii\web\View {
         elseif (is_integer($nColumns)) :
             return '{label} <div class="row"><div class="col-sm-' . $nColumns . '">{input}{error}{hint}</div></div>';
         endif;
+    }
+
+    /**
+     * Esegue il render della view indicata, cercandola nella cartella 'views-include' anziché in 'views'.
+     * @param string $viewFile Il file della view
+     * @param array $params Parametri
+     * @param object $context Controller (attuale se nullo)
+     * @return string Il risultato da visualizzare
+     * @throws ViewNotFoundException Se il file della view non esiste
+     */
+    public function renderInclude($view, $params = [], $context = null) {
+        $viewFile = preg_replace('/\/views\//', '/views-include/', $this->findViewFile($view));
+        return $this->renderFile($viewFile, $params, $context);
     }
 
 }
