@@ -188,7 +188,7 @@ class View extends \yii\web\View {
      * @throws ViewNotFoundException Se il file della view non esiste
      */
     public function renderInclude($view, $params = [], $context = null) {
-        $viewFile = preg_replace('/\/views\//', '/views-include/', $this->findViewFile($view));
+        $viewFile = preg_replace('/\/views\//', '/views-include/', $this->findViewFile($view, $context));
         return $this->renderFile($viewFile, $params, $context);
     }
 
