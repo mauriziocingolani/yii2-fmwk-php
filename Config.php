@@ -350,7 +350,7 @@ class Config extends \yii\base\Object {
             'language' => $this->_language,
             'name' => $this->_name,
             'version' => $this->_version,
-            'timeZone' => $this->_timezone,
+            'timeZone' => $this->_timeZone,
             # componenti
             'aliases' => $this->_aliases,
             'bootstrap' => $this->_bootstrap,
