@@ -12,7 +12,7 @@ use Yii;
  * @property string $version
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @version 1.0.18
+ * @version 1.0.19
  */
 class Config extends \yii\base\Object {
 
@@ -350,6 +350,7 @@ class Config extends \yii\base\Object {
             'language' => $this->_language,
             'name' => $this->_name,
             'version' => $this->_version,
+            'timeZone' => $this->_timezone,
             # componenti
             'aliases' => $this->_aliases,
             'bootstrap' => $this->_bootstrap,
