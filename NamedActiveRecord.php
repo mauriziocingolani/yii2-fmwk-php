@@ -13,7 +13,7 @@ use mauriziocingolani\yii2fmwkphp\ActiveRecord;
  * @property string $LastName Cognome della persona
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @version 1.0.3
+ * @version 1.0.4
  */
 abstract class NamedActiveRecord extends ActiveRecord {
 
@@ -42,7 +42,7 @@ abstract class NamedActiveRecord extends ActiveRecord {
         if ($this->$f || $this->$l) :
             return (strlen($this->$l) > 0 ? $this->$l : '') .
                     (strlen($this->$f) > 0 && strlen($this->$l) > 0 ? ' ' : '') .
-                    (strlen($this->$f) > 0 ? $this->$l : '');
+                    (strlen($this->$f) > 0 ? $this->$f : '');
         endif;
         return null;
     }
