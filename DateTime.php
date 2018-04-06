@@ -8,7 +8,7 @@ use yii\base\Object;
  * Utilità per oggetti di classe DateTime.
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @version 1.0.3
+ * @version 1.0.4
  */
 class DateTime extends Object {
 
@@ -95,6 +95,16 @@ class DateTime extends Object {
      */
     public static function GetMonths($indexed = false) {
         return $indexed ? self::$_italianMonths : array_values(self::$_italianMonths);
+    }
+
+    /**
+     * Restituisce un oggetto DateTime corrispondente alla data di ieri.
+     * @return \DateTime Data di ieri
+     */
+    public static function GetYesterday() {
+        $a = new \DateTime;
+        $a->sub(new \DateInterval('P1D'));
+        return $a;
     }
 
     /**
