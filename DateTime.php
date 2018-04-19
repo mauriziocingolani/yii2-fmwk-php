@@ -2,15 +2,15 @@
 
 namespace mauriziocingolani\yii2fmwkphp;
 
-use yii\base\Object;
+use yii\base\BaseObject;
 
 /**
  * Utilità per oggetti di classe DateTime.
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @version 1.0.4
+ * @version 1.0.5
  */
-class DateTime extends Object {
+class DateTime extends BaseObject {
 
     private static $_italianMonths = [
         1 => 'gennaio',

@@ -4,7 +4,7 @@ namespace mauriziocingolani\yii2fmwkphp;
 
 use Yii;
 use yii\web\HttpException;
-use yii\base\Object;
+use yii\base\BaseObject;
 
 /**
  * Oggetto restituita da un'azione in risposta a una chiamata AJAX.
@@ -18,9 +18,9 @@ use yii\base\Object;
  * 
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @version 1.0.1
+ * @version 1.0.2
  */
-class AjaxReturnObject extends Object {
+class AjaxReturnObject extends BaseObject {
 
     const MODE_NOT_STRING = 0;
     const MODE_TRUE_OR_STRING = 1;

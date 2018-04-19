@@ -3,6 +3,7 @@
 namespace mauriziocingolani\yii2fmwkphp;
 
 use Yii;
+use yii\base\BaseObject;
 
 /**
  * @property array $catchAll
@@ -12,9 +13,9 @@ use Yii;
  * @property string $version
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @version 1.0.19
+ * @version 1.0.20
  */
-class Config extends \yii\base\Object {
+class Config extends BaseObject {
 
     private $_id;
     private $_basePath;
