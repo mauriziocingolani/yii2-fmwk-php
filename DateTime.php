@@ -98,6 +98,24 @@ class DateTime extends BaseObject {
     }
 
     /**
+     * Restituisce un array di oggetti \DateTime che rappresentano i giorni della settimana indicata.
+     * La lista parte dal lunedì.
+     * @param integer $year
+     * @param integer $week
+     * @return \DateTime[] Lista dei giorni della settimana
+     */
+    public static function GetWeekDays($year, $week) {
+        $dto = new \DateTime();
+        $dto->setISODate($year, $week);
+        $days[] = clone $dto;
+        for ($i = 1; $i <= 6; $i++) :
+            $dto->add(new \DateInterval("P1D"));
+            $days[] = clone $dto;
+        endfor;
+        return $days;
+    }
+
+    /**
      * Restituisce un oggetto DateTime corrispondente alla data di ieri.
      * @return \DateTime Data di ieri
      */
