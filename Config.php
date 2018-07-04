@@ -13,7 +13,7 @@ use yii\base\BaseObject;
  * @property string $version
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @version 1.0.20
+ * @version 1.0.21
  */
 class Config extends BaseObject {
 
@@ -119,6 +119,22 @@ class Config extends BaseObject {
         $this->_components['authClientCollection'] = [
             'class' => 'yii\authclient\Collection',
             'clients' => $clients,
+        ];
+        return $this;
+    }
+
+    /**
+     * Aggiunge il componente per la gestione dei permessi tramite RBAC.
+     * I nomi assegnati alle tabelle sono YiiRbac{Assignment, Item, ItemChild, Rule}.
+     * @return \mauriziocingolani\yii2fmwkphp\Config Oggetto corrente (per concatenamento)
+     */
+    public function addAuthManagerComponent() {
+        $this->_components['authManager'] = [
+            'class' => 'yii\rbac\DbManager',
+            'assignmentTable' => 'YiiRbacAssignment',
+            'itemTable' => 'YiiRbacItem',
+            'itemChildTable' => 'YiiRbacItemChild',
+            'ruleTable' => 'YiiRbacRule',
         ];
         return $this;
     }
