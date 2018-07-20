@@ -4,6 +4,7 @@ namespace mauriziocingolani\yii2fmwkphp;
 
 use Yii;
 use yii\base\BaseObject;
+use yii\web\UrlNormalizer;
 
 /**
  * @property array $catchAll
@@ -13,7 +14,7 @@ use yii\base\BaseObject;
  * @property string $version
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @version 1.0.21
+ * @version 1.0.22
  */
 class Config extends BaseObject {
 
@@ -80,6 +81,10 @@ class Config extends BaseObject {
                 'enablePrettyUrl' => true,
                 'showScriptName' => false,
                 'enableStrictParsing' => false,
+                'normalizer' => [
+                    'class' => 'yii\web\UrlNormalizer',
+                    'action' => UrlNormalizer::ACTION_REDIRECT_PERMANENT,
+                ],
                 'rules' => require $this->_configFolder . 'rules.php',
             ],
             'view' => [
