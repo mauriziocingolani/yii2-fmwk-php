@@ -41,7 +41,7 @@ abstract class ActiveRecord extends \yii\db\ActiveRecord {
      */
     public function getCreatedUpdatedParagraph($isFemale = false) {
         $s = 'Creat' . ($isFemale ? 'a' : 'o') . ' il ' . date('d-m-Y', strtotime($this->Creato)) .
-                " da <strong>{$this->creatore->UserName}</strong>";
+                ($this->CreatoDa ? " da <strong>{$this->creatore->UserName}</strong>" : null);
         if (isset($this->Modificato) && $this->Modificato)
             $s .= Html::tag('br') .
                     'Ultima modifica il ' . date('d-m-Y', strtotime($this->Modificato)) .
