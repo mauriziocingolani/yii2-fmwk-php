@@ -22,7 +22,7 @@ use rmrevin\yii\fontawesome\FA;
  * 
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @version 1.0.12
+ * @version 1.0.13
  */
 abstract class ActiveRecord extends \yii\db\ActiveRecord {
 
@@ -83,22 +83,24 @@ abstract class ActiveRecord extends \yii\db\ActiveRecord {
      * Crea il blocco HTML standard con il pulsante di eliminazione.
      * Se è presente il parametro $confirmText, allora invece di un semplice link
      * viene inserito un pulsante di submit con il messaggio di conferma.
+     * Il pulsante può essere visualizzato in modalità inline.
      * @param string $pkField Nome del campo pk del modello
      * @param string $buttonLabel Testo del pulsante di eliminazione
      * @prams string $confirmText Testo dell'alert di conferma (opzionale)
+     * @prams boolean $inline Se true visualizza il pulsante senza paragrafo contenitore (opzionale)
      * @return string Blocco HTML
      */
-    public function getDeleteParagraph($pkField, $buttonLabel, $confirmText = null) {
+    public function getDeleteParagraph($pkField, $buttonLabel, $confirmText = null, $inline = false) {
         if ($this->isNewRecord)
             return;
-        return Html::beginTag('p') . \PHP_EOL .
-                Html::beginForm('', 'post', ['id' => strtolower($this->formName()) . '-delete-form']) . \PHP_EOL . # form
+        return ($inline ? null : Html::beginTag('p') . \PHP_EOL) .
+                Html::beginForm('', 'post', ['id' => strtolower($this->formName()) . '-delete-form', 'style' => 'display: ' . ($inline ? 'inline-block' : 'block')]) . \PHP_EOL . # form
                 Html::hiddenInput("Delete{$this->formName()}[$pkField]", $this->$pkField) . \PHP_EOL . # input nascosto con id
                 ($confirmText ?
                 Html::submitButton(FA::icon('trash-o') . ' ' . $buttonLabel, ['class' => 'btn btn-danger', 'data-confirm' => $confirmText]) :
                 Html::faa('trash-o', $buttonLabel, ['/'], ['class' => 'btn btn-danger'])) . \PHP_EOL . # pulsante eliminazione
-                Html::endForm() . \PHP_EOL .
-                Html::endTag('p');
+                Html::endForm() .
+                ($inline ? null : \PHP_EOL . Html::endTag('p'));
     }
 
     /**
