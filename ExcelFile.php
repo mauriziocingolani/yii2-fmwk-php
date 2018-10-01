@@ -29,7 +29,7 @@ use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
  * @property array $headers
  * 
  * @author Maurizio Cingolani
- * @version 1.0
+ * @version 1.0.1
  */
 class ExcelFile extends BaseObject implements \Iterator {
 
@@ -83,7 +83,7 @@ class ExcelFile extends BaseObject implements \Iterator {
      */
     public function current() {
         $c = new \stdClass();
-        for ($column = 0; $column < $this->_maxColumn; $column++) :
+        for ($column = 1; $column <= $this->_maxColumn; $column++) :
             $cell = $this->_sheet->getCellByColumnAndRow($column, $this->_position);
             $prop = $this->_headers[$column];
             if ($prop != null)
@@ -134,7 +134,7 @@ class ExcelFile extends BaseObject implements \Iterator {
         $this->_maxRow = (int) $this->_sheet->getHighestRow();
         $this->_maxColumn = (int) Coordinate::columnIndexFromString($this->_sheet->getHighestColumn());
         $this->_headers = array();
-        for ($column = 0; $column < $this->_maxColumn; $column++) :
+        for ($column = 1; $column <= $this->_maxColumn; $column++) :
             $cell = $this->_sheet->getCellByColumnAndRow($column, 1);
             $this->_headers[$column] = $cell->getValue();
         endfor;
