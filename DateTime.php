@@ -8,7 +8,7 @@ use yii\base\BaseObject;
  * Utilità per oggetti di classe DateTime.
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @version 1.0.5
+ * @version 1.0.6
  */
 class DateTime extends BaseObject {
 
@@ -67,6 +67,15 @@ class DateTime extends BaseObject {
      */
     public static function GetDay($index, $short = false) {
         return $short === true ? self::$_italianDaysShort[(int) $index] : self::$_italianDays[(int) $index];
+    }
+
+    /**
+     * Restituisce il numero del giorno corrispondente al nome breve indicato.
+     * @param string $name Nome breve del giorno (es. lun)
+     * @return integer Numero del giorno (1 per lunedì), null se non trovato
+     */
+    public static function GetDayByShortName($name) {
+        return $name ? array_search($name, self::$_italianDaysShort) : null;
     }
 
     /**
