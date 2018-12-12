@@ -8,7 +8,7 @@ use yii\db\Schema;
  * Aggiunge costanti e funzionalità alla classe yii\db\Migration.
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @version 1.0.9
+ * @version 1.0.10
  */
 class Migration extends \yii\db\Migration {
 
@@ -88,12 +88,15 @@ class Migration extends \yii\db\Migration {
      * quindi non è necessario provvedere a monte.
      * @param array $options Lista dei possibili valori del campo
      * @param boolean $notNull True per richiedere che il campo sia NOT NULL
+     * @param string $defaultValue Valore di default da impostare in caso di valore nullo
      * @return string Definizione di tipo per un enum
      */
-    protected static function typeEnum(array $options, $notNull = false) {
+    protected static function typeEnum(array $options, $notNull = false, $defaultValue = null) {
         return "ENUM('" . implode("','", array_map(function($s) {
                             return preg_replace('/\'/', "''", $s);
-                        }, $options)) . "')" . ($notNull === true ? ' NOT NULL' : '');
+                        }, $options)) . "')" .
+                ($notNull === true ? ' NOT NULL' : '') .
+                (!is_null($defaultValue) ? " DEFAULT '" . preg_replace('/\'/', "''", $defaultValue) . "'" : '');
     }
 
     /**
