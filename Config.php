@@ -14,7 +14,7 @@ use yii\web\UrlNormalizer;
  * @property string $version
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @version 1.0.22
+ * @version 1.0.23
  */
 class Config extends BaseObject {
 
@@ -343,6 +343,22 @@ class Config extends BaseObject {
     }
 
     /* Metodi */
+
+    /**
+     * Aggiunge il componente indicato.
+     * Accetta come parametro un array per aggiungere più componenti contemporaneamente.
+     * @param string|array $component Nome del componente (o lista di componenti)
+     * @return \mauriziocingolani\yii2fmwkphp\Config Oggetto corrente (per concatenamento)
+     */
+    public function addBootstrap($component) {
+        if (!is_array($component)) :
+            $component = [$component];
+        endif;
+        foreach ($component as $c) :
+            $this->_bootstrap[] = $c;
+        endforeach;
+        return $this;
+    }
 
     /**
      * Abilita Gii per gli ip indicati.
