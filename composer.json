@@ -1,7 +1,11 @@
 {
     "name": "mauriziocingolani/yii2-fmwk-php",
     "description": "Parte php del framework basato su Yii2",
-    "keywords": ["yii2", "framework", "php"],
+    "keywords": [
+        "yii2",
+        "framework",
+        "php"
+    ],
     "authors": [
         {
             "name": "Maurizio Cingolani",
@@ -15,7 +19,7 @@
     "require": {
         "php": ">=5.4.0",
         "yiisoft/yii2": "*",
-        "rmrevin/yii2-fontawesome": "2.17.1"
+        "rmrevin/yii2-fontawesome": "3.2.0"
     },
     "autoload": {
         "psr-4": {
