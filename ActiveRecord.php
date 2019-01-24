@@ -10,7 +10,7 @@ use yii\db\Exception;
 use yii\db\Expression;
 use yii\helpers\StringHelper;
 use yii\web\NotFoundHttpException;
-use rmrevin\yii\fontawesome\FAR;
+use rmrevin\yii\fontawesome\FA;
 
 /**
  * Estende yii\db\ActiveRecord aggiungendo funzionalità e utilità.
@@ -97,7 +97,7 @@ abstract class ActiveRecord extends \yii\db\ActiveRecord {
                 Html::beginForm('', 'post', ['id' => strtolower($this->formName()) . '-delete-form', 'style' => 'display: ' . ($inline ? 'inline-block' : 'block')]) . \PHP_EOL . # form
                 Html::hiddenInput("Delete{$this->formName()}[$pkField]", $this->$pkField) . \PHP_EOL . # input nascosto con id
                 ($confirmText ?
-                Html::submitButton(FAR::icon('trash-o') . ' ' . $buttonLabel, ['class' => 'btn btn-danger', 'data-confirm' => $confirmText]) :
+                Html::submitButton(FA::icon('trash-o') . ' ' . $buttonLabel, ['class' => 'btn btn-danger', 'data-confirm' => $confirmText]) :
                 Html::faa('trash-o', $buttonLabel, ['/'], ['class' => 'btn btn-danger'])) . \PHP_EOL . # pulsante eliminazione
                 Html::endForm() .
                 ($inline ? null : \PHP_EOL . Html::endTag('p'));
