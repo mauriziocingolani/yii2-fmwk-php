@@ -14,7 +14,7 @@ use yii\web\UrlNormalizer;
  * @property string $version
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @version 1.0.23
+ * @version 1.0.24
  */
 class Config extends BaseObject {
 
@@ -207,6 +207,16 @@ class Config extends BaseObject {
      */
     public function addMailComponent() {
         $this->_components['mailer'] = require $this->_configFolder . 'mail.php';
+        return $this;
+    }
+
+    /**
+     * Aggiunge il componente per la visualizzazione del campo reCaptcha.
+     * I parametri di configurazione vengono caricati dal file 'recaptcha.php' (presente nella cartella dei files di configurazione).
+     * @return \mauriziocingolani\yii2fmwkphp\Config Oggetto corrente (per concatenamento)
+     */
+    public function addRecaptchaComponent() {
+        $this->_components['reCaptcha'] = require $this->_configFolder . 'recaptcha.php';
         return $this;
     }
 

@@ -25,5 +25,17 @@
         "psr-4": {
             "mauriziocingolani\\yii2fmwkphp\\": "/"
         }
+    },
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://asset-packagist.org"
+        }
+    ],
+    "config": {
+        "process-timeout": 1800,
+        "fxp-asset": {
+            "enabled": false
+        }
     }
 }
