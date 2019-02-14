@@ -21,7 +21,7 @@ use yii\web\NotFoundHttpException;
  * 
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @version 1.0.14
+ * @version 1.0.15
  */
 abstract class ActiveRecord extends \yii\db\ActiveRecord {
 
@@ -87,6 +87,7 @@ abstract class ActiveRecord extends \yii\db\ActiveRecord {
      * @param string $buttonLabel Testo del pulsante di eliminazione
      * @prams string $confirmText Testo dell'alert di conferma (opzionale)
      * @prams boolean $inline Se true visualizza il pulsante senza paragrafo contenitore (opzionale)
+     * @prams string $buttonIcon Icona FontAwesome per il pulsante di eliminazione (opzionale)
      * @return string Blocco HTML
      */
     public function getDeleteParagraph($pkField, $buttonLabel, $confirmText = null, $inline = false, $buttonIcon = 'far fa-trash-alt') {
@@ -96,8 +97,8 @@ abstract class ActiveRecord extends \yii\db\ActiveRecord {
                 Html::beginForm('', 'post', ['id' => strtolower($this->formName()) . '-delete-form', 'style' => 'display: ' . ($inline ? 'inline-block' : 'block')]) . \PHP_EOL . # form
                 Html::hiddenInput("Delete{$this->formName()}[$pkField]", $this->$pkField) . \PHP_EOL . # input nascosto con id
                 ($confirmText ?
-                Html::submitButton('<i class="' . $buttonIcon . ' fa-fw"></i>' . $buttonLabel, ['class' => 'btn btn-danger', 'data-confirm' => $confirmText]) :
-                Html::faa('trash-o', $buttonLabel, ['/'], ['class' => 'btn btn-danger'])) . \PHP_EOL . # pulsante eliminazione
+                Html::submitButton('<i class="' . $buttonIcon . ' fa-fw"></i> ' . $buttonLabel, ['class' => 'btn btn-danger', 'data-confirm' => $confirmText]) :
+                Html::a('<i class="' . $buttonIcon . ' fa-fw"></i> ' . $buttonLabel, ['/'], ['class' => 'btn btn-danger'])) . \PHP_EOL . # pulsante eliminazione
                 Html::endForm() .
                 ($inline ? null : \PHP_EOL . Html::endTag('p'));
     }
