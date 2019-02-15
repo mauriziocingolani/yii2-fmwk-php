@@ -85,9 +85,9 @@ abstract class ActiveRecord extends \yii\db\ActiveRecord {
      * Il pulsante può essere visualizzato in modalità inline.
      * @param string $pkField Nome del campo pk del modello
      * @param string $buttonLabel Testo del pulsante di eliminazione
-     * @prams string $confirmText Testo dell'alert di conferma (opzionale)
-     * @prams boolean $inline Se true visualizza il pulsante senza paragrafo contenitore (opzionale)
-     * @prams string $buttonIcon Icona FontAwesome per il pulsante di eliminazione (opzionale)
+     * @param string $confirmText Testo dell'alert di conferma (opzionale)
+     * @param boolean $inline Se true visualizza il pulsante senza paragrafo contenitore (opzionale)
+     * @param string $buttonIcon Icona FontAwesome per il pulsante di eliminazione (opzionale)
      * @return string Blocco HTML
      */
     public function getDeleteParagraph($pkField, $buttonLabel, $confirmText = null, $inline = false, $buttonIcon = 'far fa-trash-alt') {
