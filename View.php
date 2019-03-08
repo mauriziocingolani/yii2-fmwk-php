@@ -3,14 +3,14 @@
 namespace mauriziocingolani\yii2fmwkphp;
 
 use Yii;
-use yii\bootstrap\Alert;
 use yii\helpers\Url;
+use mauriziocingolani\yii2fmwkphp\Html;
 
 /**
  * Estende la classe View aggiungendo alcune funzionalità.
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @version 1.0.16
+ * @version 1.0.17
  */
 class View extends \yii\web\View {
 
@@ -119,13 +119,7 @@ class View extends \yii\web\View {
                 continue;# non visualizzo il flash se non è compreso tra quelli consentiti
             if (($i = strpos($type, '_')) !== false)
                 $type = substr($type, 0, $i);
-            echo Alert::widget([
-                'closeButton' => false,
-                'options' => [
-                    'class' => 'alert-' . $type,
-                ],
-                'body' => $message,
-            ]);
+            echo Html::tag('div', $message, ['class' => 'alert alert-' . $type]);
         endforeach;
     }
 
