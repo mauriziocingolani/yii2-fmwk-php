@@ -14,7 +14,7 @@ use yii\web\UrlNormalizer;
  * @property string $version
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @version 1.0.24
+ * @version 1.0.25
  */
 class Config extends BaseObject {
 
@@ -26,6 +26,7 @@ class Config extends BaseObject {
     private $_aliases;
     private $_catchAll;
     private $_components;
+    private $_controllerNamespace;
     private $_language;
     private $_modules;
     private $_name;
@@ -39,12 +40,14 @@ class Config extends BaseObject {
      * Costruisce una nuova istanza della classe e imposta le proprietà fondamentali.
      * @param type $id Id applicazione
      * @param type $basePath Cartella root dell'applicazione
-     * @param type $filesSubfolder Sottocartella per i files di configurazione
+     * @param type $filesSubfolder Sottocartella per i files di configurazione (opzionale)
+     * @param type $filesSubfolder Namespace dei controller (opzionale)
      */
-    public function __construct($id, $basePath, $filesSubfolder = null) {
+    public function __construct($id, $basePath, $filesSubfolder = null, $controllerNamespace = null) {
         $this->_id = $id;
         $this->_basePath = $basePath;
-        $this->_configFolder = dirname(__FILE__) . '/../../../config/' . ($filesSubfolder ? $filesSubfolder . '/' : '');
+        $this->_configFolder = $basePath . '/config/' . ($filesSubfolder ? $filesSubfolder . '/' : '');
+        $this->_controllerNamespace = $controllerNamespace;
         parent::__construct();
     }
 
@@ -271,12 +274,13 @@ class Config extends BaseObject {
      * Aggiunge il componente per la gestione del login utente. 
      * Presuppone che esista la classie app\components\AppUser se non viene specificato il 
      * parametro $identityClass.
-     * @param string $identityClass Nome della classe che rappresenta gli utenti
+     * @param string $identityClass Nome della classe che rappresenta gli utenti (opzionale)
+     * @param string $identityClass Nome della classe che rappresenta l'utente dell'applicazione (opzionale)
      * @return \mauriziocingolani\yii2fmwkphp\Config Oggetto corrente (per concatenamento)
      */
-    public function addUserComponent($identityClass = 'app\modules\user\models\User') {
+    public function addUserComponent($identityClass = 'app\modules\user\models\User', $appUserClass = 'app\components\AppUser') {
         $this->_components['user'] = [
-            'class' => 'app\components\AppUser',
+            'class' => $appUserClass,
             'enableAutoLogin' => true,
             'identityClass' => $identityClass,
             'loginUrl' => ['/login'],
@@ -309,7 +313,7 @@ class Config extends BaseObject {
 
     /**
      * Aggiunge un modulo all'applicazione.
-     * @param array $module Array diu configurazione del modulo
+     * @param array $module Array di configurazione del modulo
      * @return \mauriziocingolani\yii2fmwkphp\Config Oggetto corrente (per concatenamento)
      */
     public function addModule($module) {
@@ -408,6 +412,8 @@ class Config extends BaseObject {
             'params' => $this->_params,
             'catchAll' => $this->_catchAll,
         ];
+        if ($this->_controllerNamespace)
+            $conf['controllerNamespace'] = $this->_controllerNamespace;
         if ($this->_onBeforeRequest)
             $conf['on beforeRequest'] = $this->_onBeforeRequest;
         return $conf;
