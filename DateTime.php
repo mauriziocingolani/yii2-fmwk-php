@@ -8,7 +8,7 @@ use yii\base\BaseObject;
  * Utilità per oggetti di classe DateTime.
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @version 1.0.6
+ * @version 1.0.7
  */
 class DateTime extends BaseObject {
 
@@ -160,6 +160,26 @@ class DateTime extends BaseObject {
         if ($forceShowSeconds || ($diff->m == 0 && $diff->h == 0 && $diff->i == 0))
             $s[] = "{$diff->s}s";
         return join(' ', $s);
+    }
+
+    /**
+     * Restituisce la durata dell'intervallo nella forma testuale (es. 6h). Viene mostrata un solo numero,
+     * nell'unità di misura principale. Le sottounità vengono ignorate.
+     * @param \DateInterval $diff Oggetto DateInterval
+     * @return string Stinga che rappresenta la durata.
+     */
+    public static function GetDateIntervalShortString(\DateInterval $diff) {
+        if (is_null($diff))
+            return null;
+        if ($diff->days == 0 && $diff->h == 0 && $diff->i == 0) :
+            return $diff->s . 's';
+        elseif ($diff->days == 0 && $diff->h == 0) :
+            return $diff->i . 'm';
+        elseif ($diff->days == 0) :
+            return $diff->h . 'h';
+        else :
+            return $diff->days . 'd';
+        endif;
     }
 
     /**
