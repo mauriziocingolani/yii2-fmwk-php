@@ -2,11 +2,13 @@
 
 namespace mauriziocingolani\yii2fmwkphp;
 
+use Yii;
+
 /**
  * Estende la classe Controller aggiungendo alcune funzionalità.
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @version 1.0.1
+ * @version 1.0.2
  */
 class Controller extends \yii\web\Controller {
 
@@ -34,6 +36,14 @@ class Controller extends \yii\web\Controller {
         $default = self::behaviors();
         $default['access']['rules'] = $rules;
         return $default;
+    }
+
+    /**
+     * Verifica se il debug è attivo e se l'ip dell'utente attuale rientra in quelli consentiti per debug.
+     * @return boolean True se l'applicazione ha il debug attivato
+     */
+    public function getIsDebug() {
+        return isset(Yii::$app->modules['debug']) && in_array(Yii::$app->request->userIP, Yii::$app->modules['debug']->allowedIPs);
     }
 
 }
