@@ -14,7 +14,7 @@ use yii\web\UrlNormalizer;
  * @property string $version
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @version 1.0.25
+ * @version 1.0.26
  */
 class Config extends BaseObject {
 
@@ -227,16 +227,17 @@ class Config extends BaseObject {
      * Aggiunge il componente per il salvataggio su database dei dati di sessione.
      * Tramite l'array dei parametri è possibile impostare il nome della tabella (default 'YiiSessions')
      * e la durata (in secondi) della sessione.
-     * @param array $params Parametri di configurazione ('sessionTable','timeout')
+     * @param array $params Parametri di configurazione ('sessionTable','timeout','cookieParams')
      * @return \mauriziocingolani\yii2fmwkphp\Config Oggetto corrente (per concatenamento)
      */
     public function addSessionComponent(array $params = null) {
-        if (is_array($params))
-            $this->_components['session'] = [
-                'class' => 'yii\web\DbSession',
-                'sessionTable' => is_array($params) && isset($params['sessionTable']) ? $params['sessionTable'] : 'YiiSessions',
-                'timeout' => is_array($params) && isset($params['timeout']) ? $params['timeout'] : 1440,
-            ];
+        $this->_components['session'] = [
+            'class' => 'yii\web\DbSession',
+            'sessionTable' => is_array($params) && isset($params['sessionTable']) ? $params['sessionTable'] : 'YiiSessions',
+            'timeout' => is_array($params) && isset($params['timeout']) ? $params['timeout'] : 1440,
+        ];
+        if (is_array($params) && isset($params['cookieParams']))
+            $this->_components['session']['cookieParams'] = $params['cookieParams'];
         return $this;
     }
 
@@ -276,15 +277,18 @@ class Config extends BaseObject {
      * parametro $identityClass.
      * @param string $identityClass Nome della classe che rappresenta gli utenti (opzionale)
      * @param string $identityClass Nome della classe che rappresenta l'utente dell'applicazione (opzionale)
+     * @param array $identityCookie Array per la configurazione del cookie di identità (opzionale)
      * @return \mauriziocingolani\yii2fmwkphp\Config Oggetto corrente (per concatenamento)
      */
-    public function addUserComponent($identityClass = 'app\modules\user\models\User', $appUserClass = 'app\components\AppUser') {
+    public function addUserComponent($identityClass = 'app\modules\user\models\User', $appUserClass = 'app\components\AppUser', array $identityCookie = null) {
         $this->_components['user'] = [
             'class' => $appUserClass,
             'enableAutoLogin' => true,
             'identityClass' => $identityClass,
             'loginUrl' => ['/login'],
         ];
+        if (!is_null($identityCookie))
+            $this->_components['user']['identityCookie'] = $identityCookie;
         return $this;
     }
 
