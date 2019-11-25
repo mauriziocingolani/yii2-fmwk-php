@@ -9,7 +9,7 @@ use yii\base\BaseObject;
  * Fornisce i dati relativi ai giorni e alla settimane.
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @version 1.0.0
+ * @version 1.0.1
  */
 class Calendar extends BaseObject {
 
@@ -110,7 +110,7 @@ class Calendar extends BaseObject {
      */
     public function getLastWeekYear(): int {
         if (is_null($this->_lastWeekYear))
-            $this->_lastWeekYear = (int) ($this->_lastWeek == 1 ? $this->_year + 1 : $this->_year);
+            $this->_lastWeekYear = (int) ($this->getLastWeek() == 1 ? $this->_year + 1 : $this->_year);
         return $this->_lastWeekYear;
     }
 
@@ -122,7 +122,7 @@ class Calendar extends BaseObject {
      */
     public function getFirstDayOfFirstWeek(string $format = null) {
         if (is_null($this->_firstDayOfFirstWeek))
-            $this->_firstDayOfFirstWeek = (new \DateTime)->setISODate($this->_firstWeekYear, $this->_firstWeek);
+            $this->_firstDayOfFirstWeek = (new \DateTime)->setISODate($this->getFirstWeekYear(), $this->getFirstWeek());
         if ($format)
             return $this->_firstDayOfFirstWeek->format($format);
         return clone $this->_firstDayOfFirstWeek;
@@ -136,7 +136,7 @@ class Calendar extends BaseObject {
      */
     public function getLastDayOfLastWeek(string $format = null) {
         if (is_null($this->_lastDayOfLastWeek)) :
-            $date = (new \DateTime)->setISODate($this->_lastWeekYear, $this->_lastWeek);
+            $date = (new \DateTime)->setISODate($this->getLastWeekYear(), $this->getLastWeek());
             $this->_lastDayOfLastWeek = $date->add(new \DateInterval('P6D'));
         endif;
         if ($format)
