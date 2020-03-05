@@ -21,9 +21,38 @@ use yii\web\NotFoundHttpException;
  * 
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @version 1.0.16
+ * @version 1.0.17
  */
 abstract class ActiveRecord extends \yii\db\ActiveRecord {
+
+    private $_Creato;
+    private $_Modificato;
+
+    public function afterFind() {
+        parent::afterFind();
+        if ($this->hasAttribute('Creato') && $this->Creato)
+            $this->_Creato = new \DateTime($this->Creato);
+        if ($this->hasAttribute('Modificato') && $this->Modificato)
+            $this->_Modificato = new \DateTime($this->Modificato);
+    }
+
+    /**
+     * Restituisce la data e ora di creazione del record secondo il formato specificato.
+     * @param string $format Formato data/ora (default 'd/m/Y H:i')
+     * @return string Data/ora formattata
+     */
+    public function formatCreato($format = 'd/m/Y H:i') {
+        return $this->_Creato->format($format);
+    }
+
+    /**
+     * Restituisce la data e ora di modifica del record secondo il formato specificato.
+     * @param string $format Formato data/ora (default 'd/m/Y H:i')
+     * @return string Data/ora formattata
+     */
+    public function formatModificato($format = 'd/m/Y H:i') {
+        return $this->_Modificato->format($format);
+    }
 
     /**
      * Crea un paragrafo (con classe 'created') con le informazioni sulle date e sugli autori
