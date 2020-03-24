@@ -21,7 +21,7 @@ use yii\web\NotFoundHttpException;
  * 
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @version 1.0.17
+ * @version 1.0.18
  */
 abstract class ActiveRecord extends \yii\db\ActiveRecord {
 
@@ -64,17 +64,23 @@ abstract class ActiveRecord extends \yii\db\ActiveRecord {
      * <li>Modificato: stringa con data e ora di modifica (formato MySQL)</li>
      * <li>modificatore: realazione con la tabella degli utenti
      * </ul>
-     * @param type $isFemale True per indicare che l'oggetto è al femminile
+     * @param boolean $isFemale True per indicare che l'oggetto è al femminile
+     * @param array $options Opzioni html per il tag "p" esterno
      * @return string Paragrafo con informazioni di creazione e modifica
      */
-    public function getCreatedUpdatedParagraph($isFemale = false) {
+    public function getCreatedUpdatedParagraph($isFemale = false, $options = null) {
         $s = 'Creat' . ($isFemale ? 'a' : 'o') . ' il ' . date('d-m-Y', strtotime($this->Creato)) .
                 ($this->CreatoDa ? " da <strong>{$this->creatore->UserName}</strong>" : null);
         if (isset($this->Modificato) && $this->Modificato)
             $s .= Html::tag('br') .
                     'Ultima modifica il ' . date('d-m-Y', strtotime($this->Modificato)) .
                     ($this->ModificatoDa ? " da parte di <strong>{$this->modificatore->UserName}</strong>" : null);
-        return Html::tag('p', $s, ['class' => 'created']);
+        if ($options) :
+            $options['class'] = isset($options['class']) ? $options['class'] . ' created' : 'created';
+        else :
+            $options['class'] = 'created';
+        endif;
+        return Html::tag('p', $s, $options);
     }
 
     /**
@@ -98,12 +104,13 @@ abstract class ActiveRecord extends \yii\db\ActiveRecord {
      * @param string $buttonLabel Testo del pulsante di eliminazione
      * @param boolean $isFemale True per indicare che l'oggetto è al femminile
      * @param string $confirmText Eventuale testo di conferma per il pulsante di eliminazione
+     * @param array $options Opzioni html per il tag "p" esterno
      * @return string Blocco HTML
      */
-    public function getCreatedUpdatedBlock($pkField, $buttonLabel, $isFemale = false, $confirmText = null) {
+    public function getCreatedUpdatedBlock($pkField, $buttonLabel, $isFemale = false, $confirmText = null, $options = null) {
         if ($this->isNewRecord)
             return;
-        return $this->getCreatedUpdatedParagraph($isFemale) . \PHP_EOL .
+        return $this->getCreatedUpdatedParagraph($isFemale, $options) . \PHP_EOL .
                 $this->getDeleteParagraph($pkField, $buttonLabel, $confirmText);
     }
 
