@@ -14,7 +14,7 @@ use yii\web\UrlNormalizer;
  * @property string $version
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @version 1.0.26
+ * @version 1.0.27
  */
 class Config extends BaseObject {
 
@@ -156,6 +156,17 @@ class Config extends BaseObject {
         $this->_components['cache'] = [
             'class' => 'yii\caching\DbCache',
             'cacheTable' => $tableName ? $tableName : 'YiiCache',
+        ];
+        return $this;
+    }
+
+    /**
+     * Aggiunge il componente per la cache su file.
+     * @return \mauriziocingolani\yii2fmwkphp\Config Oggetto corrente (per concatenamento)
+     */
+    public function addCacheFileComponent() {
+        $this->_components['cache'] = [
+            'class' => 'yii\caching\FileCache',
         ];
         return $this;
     }
