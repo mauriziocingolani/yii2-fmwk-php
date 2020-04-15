@@ -14,26 +14,26 @@ use yii\web\NotFoundHttpException;
 /**
  * Estende yii\db\ActiveRecord aggiungendo funzionalità e utilità.
  * 
- * @property string $Creato
- * @property integer $CreatoDa
- * @property string $Modificato
- * @property integer $ModificatoDa
+ * @property string $Created
+ * @property integer $CreatedBy
+ * @property string $Updated
+ * @property integer $UpdatedBy
  * 
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @version 1.0.18
+ * @version 1.1.0
  */
 abstract class ActiveRecord extends \yii\db\ActiveRecord {
 
-    private $_Creato;
-    private $_Modificato;
+    private $_Created;
+    private $_Updated;
 
     public function afterFind() {
         parent::afterFind();
-        if ($this->hasAttribute('Creato') && $this->Creato)
-            $this->_Creato = new \DateTime($this->Creato);
-        if ($this->hasAttribute('Modificato') && $this->Modificato)
-            $this->_Modificato = new \DateTime($this->Modificato);
+        if ($this->hasAttribute('Created') && $this->Created)
+            $this->_Created = new \DateTime($this->Created);
+        if ($this->hasAttribute('Updated') && $this->Updated)
+            $this->_Updated = new \DateTime($this->Updated);
     }
 
     /**
@@ -41,8 +41,8 @@ abstract class ActiveRecord extends \yii\db\ActiveRecord {
      * @param string $format Formato data/ora (default 'd/m/Y H:i')
      * @return string Data/ora formattata
      */
-    public function formatCreato($format = 'd/m/Y H:i') {
-        return $this->_Creato->format($format);
+    public function formatCreated($format = 'd/m/Y H:i') {
+        return $this->_Created->format($format);
     }
 
     /**
@@ -50,8 +50,8 @@ abstract class ActiveRecord extends \yii\db\ActiveRecord {
      * @param string $format Formato data/ora (default 'd/m/Y H:i')
      * @return string Data/ora formattata
      */
-    public function formatModificato($format = 'd/m/Y H:i') {
-        return $this->_Modificato->format($format);
+    public function formatUpdated($format = 'd/m/Y H:i') {
+        return $this->_Updated->format($format);
     }
 
     /**
@@ -59,22 +59,22 @@ abstract class ActiveRecord extends \yii\db\ActiveRecord {
      * della creazione e della ultima modifica dell'oggetto in questione.
      * Presuppone che l'oggetto abbia le seguenti proprietà:
      * <ul>
-     * <li>Creato: stringa con data e ora di creazione (formato MySQL)</li>
-     * <li>creatore: realazione con la tabella degli utenti
-     * <li>Modificato: stringa con data e ora di modifica (formato MySQL)</li>
-     * <li>modificatore: realazione con la tabella degli utenti
+     * <li>Created: stringa con data e ora di creazione (formato MySQL)</li>
+     * <li>creator: realazione con la tabella degli utenti
+     * <li>Updated: stringa con data e ora di modifica (formato MySQL)</li>
+     * <li>updater: realazione con la tabella degli utenti
      * </ul>
      * @param boolean $isFemale True per indicare che l'oggetto è al femminile
      * @param array $options Opzioni html per il tag "p" esterno
      * @return string Paragrafo con informazioni di creazione e modifica
      */
     public function getCreatedUpdatedParagraph($isFemale = false, $options = null) {
-        $s = 'Creat' . ($isFemale ? 'a' : 'o') . ' il ' . date('d-m-Y', strtotime($this->Creato)) .
-                ($this->CreatoDa ? " da <strong>{$this->creatore->UserName}</strong>" : null);
-        if (isset($this->Modificato) && $this->Modificato)
+        $s = 'Creat' . ($isFemale ? 'a' : 'o') . ' il ' . date('d-m-Y', strtotime($this->Created)) .
+                ($this->CreatedBy ? " da <strong>{$this->creator->UserName}</strong>" : null);
+        if (isset($this->Updated) && $this->Updated)
             $s .= Html::tag('br') .
-                    'Ultima modifica il ' . date('d-m-Y', strtotime($this->Modificato)) .
-                    ($this->ModificatoDa ? " da parte di <strong>{$this->modificatore->UserName}</strong>" : null);
+                    'Ultima modifica il ' . date('d-m-Y', strtotime($this->Updated)) .
+                    ($this->UpdatedBy ? " da parte di <strong>{$this->updater->UserName}</strong>" : null);
         if ($options) :
             $options['class'] = isset($options['class']) ? $options['class'] . ' created' : 'created';
         else :
@@ -167,7 +167,7 @@ abstract class ActiveRecord extends \yii\db\ActiveRecord {
      * @param string $updatedField Nome del campo da aggiornare in seguito alla modifica
      * @return array Configurazione del behavior
      */
-    public function getBlameableBehavior($createdField = 'CreatoDa', $updatedField = 'ModificatoDa') {
+    public function getBlameableBehavior($createdField = 'CreatedBy', $updatedField = 'UpdatedBy') {
         return ['class' => BlameableBehavior::className(),
             'attributes' => [
                 self::EVENT_BEFORE_INSERT => $createdField,
@@ -198,7 +198,7 @@ abstract class ActiveRecord extends \yii\db\ActiveRecord {
      * @param string $expression (opzionale) Valore da assegnare al campo
      * @return array Configurazione del behavior
      */
-    public function getTimestampBehavior($createdField = 'Creato', $updatedField = 'Modificato', $expression = null) {
+    public function getTimestampBehavior($createdField = 'Created', $updatedField = 'Updated', $expression = null) {
         return ['class' => TimestampBehavior::className(),
             'attributes' => [
                 self::EVENT_BEFORE_INSERT => [$createdField],
