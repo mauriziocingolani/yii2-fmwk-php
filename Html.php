@@ -8,7 +8,7 @@ use Yii;
  * Estende la classe yii\helpers\Html aggiungendo metodi e funzionalità.
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @version 1.0.5
+ * @version 1.0.6
  */
 class Html extends \yii\helpers\Html {
 
@@ -177,10 +177,20 @@ class Html extends \yii\helpers\Html {
      * @param string $url Url
      * @param string $type Colore del pulsante (primary, success, info, warning, danger, secondary, light)
      * @param string $size Dimensione (sm, lg)
+     * @param array $options Opzioni del tag html
      * @return string Tag generato
      */
-    public static function splitAnchor($icon, $text, $url, $type, $size = null) {
-        return self::a(self::_splitContent($icon, $text), $url, ['class' => "btn btn-$type btn-icon-split" . ($size ? " btn-$size" : null)]);
+    public static function splitAnchor($icon, $text, $url, $type, $size = null, $options = null) {
+        $opts = ['class' => "btn btn-$type btn-icon-split" . ($size ? " btn-$size" : null)];
+        if (is_array($options)) :
+            # se è stato impostato class lo appendo 
+            if (isset($options['class'])) :
+                $opts['class'] = $opts['class'] . ' ' . $options['class'];
+                unset($options['class']);
+            endif;
+            $opts = array_merge($opts, $options);
+        endif;
+        return self::a(self::_splitContent($icon, $text), $url, $opts);
     }
 
     /**
@@ -189,7 +199,7 @@ class Html extends \yii\helpers\Html {
      * @param string $text Testo
      * @param string $type Colore del pulsante (primary, success, info, warning, danger, secondary, light)
      * @param string $size Eventuale dimensione (sm, lg)
-     * @param array $options Attributi html del pulsante
+     * @param array $options Opzioni HTML
      * @return string Tag generato
      */
     public static function splitSubmitButton($icon, $text, $type, $size = null, array $options = null) {
