@@ -21,7 +21,7 @@ use yii\web\NotFoundHttpException;
  * 
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @version 1.1.0
+ * @version 1.1.1
  */
 abstract class ActiveRecord extends \yii\db\ActiveRecord {
 
@@ -42,7 +42,7 @@ abstract class ActiveRecord extends \yii\db\ActiveRecord {
      * @return string Data/ora formattata
      */
     public function formatCreated($format = 'd/m/Y H:i') {
-        return $this->_Created->format($format);
+        return $this->_Created ? $this->_Created->format($format) : null;
     }
 
     /**
@@ -51,7 +51,7 @@ abstract class ActiveRecord extends \yii\db\ActiveRecord {
      * @return string Data/ora formattata
      */
     public function formatUpdated($format = 'd/m/Y H:i') {
-        return $this->_Updated->format($format);
+        return $this->_Updated ? $this->_Updated->format($format) : null;
     }
 
     /**
