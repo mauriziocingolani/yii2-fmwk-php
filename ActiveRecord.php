@@ -21,19 +21,25 @@ use yii\web\NotFoundHttpException;
  * 
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @version 1.1.1
+ * @version 1.1.2
  */
 abstract class ActiveRecord extends \yii\db\ActiveRecord {
 
     private $_Created;
     private $_Updated;
+    private $_CreatedUTC;
+    private $_UpdatedUTC;
 
     public function afterFind() {
         parent::afterFind();
-        if ($this->hasAttribute('Created') && $this->Created)
+        if ($this->hasAttribute('Created') && $this->Created) :
             $this->_Created = new \DateTime($this->Created);
-        if ($this->hasAttribute('Updated') && $this->Updated)
+            $this->_CreatedUTC = new \DateTime(date('Y/m/d H:i:s', strtotime("$this->Created UTC")));
+        endif;
+        if ($this->hasAttribute('Updated') && $this->Updated) :
             $this->_Updated = new \DateTime($this->Updated);
+            $this->_UpdatedUTC = new \DateTime(date('Y/m/d H:i:s', strtotime("$this->Updated UTC")));
+        endif;
     }
 
     /**
@@ -46,12 +52,30 @@ abstract class ActiveRecord extends \yii\db\ActiveRecord {
     }
 
     /**
+     * Restituisce la data e ora di creazione (in UTC) del record secondo il formato specificato.
+     * @param string $format Formato data/ora (default 'd/m/Y H:i')
+     * @return string Data/ora formattata
+     */
+    public function formatCreatedUTC($format = 'd/m/Y H:i') {
+        return $this->_CreatedUTC ? $this->_CreatedUTC->format($format) : null;
+    }
+
+    /**
      * Restituisce la data e ora di modifica del record secondo il formato specificato.
      * @param string $format Formato data/ora (default 'd/m/Y H:i')
      * @return string Data/ora formattata
      */
     public function formatUpdated($format = 'd/m/Y H:i') {
         return $this->_Updated ? $this->_Updated->format($format) : null;
+    }
+
+    /**
+     * Restituisce la data e ora di modifica (in UTC) del record secondo il formato specificato.
+     * @param string $format Formato data/ora (default 'd/m/Y H:i')
+     * @return string Data/ora formattata
+     */
+    public function formatUpdatedUTC($format = 'd/m/Y H:i') {
+        return $this->_UpdatedUTC ? $this->_UpdatedUTC->format($format) : null;
     }
 
     /**
@@ -209,6 +233,24 @@ abstract class ActiveRecord extends \yii\db\ActiveRecord {
     }
 
     /**
+     * Restituisce l'array con i parametri di configurazione per TimestampBehavior.
+     * Di default assegna ai campi il valore "UTC_TIMESTAMP".
+     * @param string $createdField Nome del campo da aggiornare in seguito alla creazione
+     * @param string $updatedField Nome del campo da aggiornare in seguito alla modifica
+     * @param string $expression (opzionale) Valore da assegnare al campo
+     * @return array Configurazione del behavior
+     */
+    public function getTimestampUTCBehavior($createdField = 'Created', $updatedField = 'Updated', $expression = null) {
+        return ['class' => TimestampBehavior::className(),
+            'attributes' => [
+                self::EVENT_BEFORE_INSERT => [$createdField],
+                self::EVENT_BEFORE_UPDATE => [$updatedField],
+            ],
+            'value' => $expression ? $expression : new Expression('UTC_TIMESTAMP'),
+        ];
+    }
+
+    /**
      * Converte la data dal formato 'Y-m-d' (o 'Y-m-d H:i:s') a 'd/m/Y'.
      * @param string $mysqlDate Data in formato MySQL
      * @return string Data in formato italiano
@@ -261,6 +303,16 @@ abstract class ActiveRecord extends \yii\db\ActiveRecord {
     public static function MysqlToItalianTime($string, $showSeconds = false) {
         $split = preg_split('/[ ]/', $string);
         return substr($split[1], 0, $showSeconds ? 8 : 5);
+    }
+
+    /**
+     * Converte la data e ora (in UTC) dal formato 'Y-m-d H:i[:s]'  a 'H:i[:s]'.
+     * @param string $string Data e ora in formato MySQL
+     * @param boolean $showSeconds True per mostrare anche i secondi
+     * @return string Ora in formato italiano
+     */
+    public static function MysqlToItalianUTCTime($string, $showSeconds = false) {
+        return date('H:i' . ($showSeconds ? ':s' : null), strtotime("$string UTC"));
     }
 
     /**
