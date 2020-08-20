@@ -10,7 +10,7 @@ use mauriziocingolani\yii2fmwkphp\Html;
  * Estende la classe View aggiungendo alcune funzionalità.
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @version 1.0.18
+ * @version 1.0.19
  */
 class View extends \yii\web\View {
 
@@ -163,6 +163,22 @@ class View extends \yii\web\View {
      */
     public function getGridviewLayout() {
         return "{summary}\n{items}\n<div class='text-right'>{pager}</div>";
+    }
+
+    /**
+     * Corregge l'errore di visualizzazione dei pulsanti in Bootstrap4.
+     * @return array Opzioni per visualizzazione
+     */
+    public function getGridviewCssOptions() {
+        return [
+            'linkOptions' => [
+                'class' => 'page-link',
+            ],
+            'linkContainerOptions' => [
+                'class' => 'paginate_button page-item',
+            ],
+            'disabledPageCssClass' => 'page-link',
+        ];
     }
 
     /**
