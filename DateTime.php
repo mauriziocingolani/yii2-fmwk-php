@@ -8,7 +8,7 @@ use yii\base\BaseObject;
  * Utilità per oggetti di classe DateTime.
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @version 1.0.7
+ * @version 1.0.8
  */
 class DateTime extends BaseObject {
 
@@ -180,6 +180,19 @@ class DateTime extends BaseObject {
         else :
             return $diff->days . 'd';
         endif;
+    }
+
+    /**
+     * Restituisce una stringa in formato leggibile hh:mm:ss a partire da un numero di secondi.
+     * @param integer $seconds Numero di secondi
+     * @return string Stringa in formato hh:mm:ss
+     */
+    public static function GetTimeStringFromSeconds($seconds) {
+        $s = '';
+        $hours = (int) $seconds / 3600;
+        $minutes = (int) (($seconds % 3600) / 60);
+        $seconds = (int) (($seconds % 3600) % 60);
+        return ($hours > 0 ? sprintf('%02d', $hours) : '00') . ':' . ($minutes > 0 ? sprintf('%02d', $minutes) : '00') . ':' . sprintf('%02d', $seconds);
     }
 
     /**
