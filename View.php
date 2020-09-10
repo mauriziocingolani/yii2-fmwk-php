@@ -10,7 +10,7 @@ use mauriziocingolani\yii2fmwkphp\Html;
  * Estende la classe View aggiungendo alcune funzionalità.
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @version 1.0.19
+ * @version 1.0.20
  */
 class View extends \yii\web\View {
 
@@ -210,6 +210,29 @@ class View extends \yii\web\View {
             $viewFile = preg_replace('/\/views\//', '/views-include/', $this->findViewFile($view, $context));
         endif;
         return $this->renderFile($viewFile, $params, $context);
+    }
+
+    /**
+     * Registra un tag <link> per la favicon.
+     * @param string $href Percorso immagine (default: '/img/favicon.png')
+     * @param string $type MIME type dell'immagine (default: 'image/png')
+     * @param string $key Key per il tag
+     */
+    public function registerFavicon($href = '/img/favicon.png', $type = 'image/png', $key = null) {
+        $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/png', 'href' => $href], $key);
+    }
+
+    /**
+     * Registra quattro tag <link> per le icone Apple.
+     * Le dimensioni predefinite sono 57x57, 72x72, 114x114, 144x144.
+     * @param string $extension Estensione delle icone (default: 'png')
+     * @param string $key Key per il tag
+     */
+    public function registerAppleIcons($extension = 'png', $key = null) {
+        $sizes = ['57x57', '72x72', '114x114', '144x144'];
+        foreach ($sizes as $size) :
+            $this->registerLinkTag(['rel' => 'apple-touch-icon-precomposed', 'sizes' => $size, 'href' => "/img/apple-icon-$size-precomposed.$extension"], $key);
+        endforeach;
     }
 
 }
