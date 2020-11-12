@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8fc077b1ea3207083b317d018d9e3145",
+    "content-hash": "f215cba5dde0f2b621dba540ecd87845",
     "packages": [
         {
             "name": "bower-asset/inputmask",
@@ -32,7 +32,7 @@
             "version": "3.5.1",
             "source": {
                 "type": "git",
-                "url": "git@github.com:jquery/jquery-dist.git",
+                "url": "https://github.com/jquery/jquery-dist.git",
                 "reference": "4c0e4becb8263bb5b3e6dadc448d8e7305ef8215"
             },
             "dist": {
@@ -65,7 +65,7 @@
             "version": "2.0.7.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/yiisoft/jquery-pjax.git",
+                "url": "git@github.com:yiisoft/jquery-pjax.git",
                 "reference": "aef7b953107264f00234902a3880eb50dafc48be"
             },
             "dist": {
@@ -193,16 +193,16 @@
         },
         {
             "name": "yiisoft/yii2",
-            "version": "2.0.37",
+            "version": "2.0.39",
             "source": {
                 "type": "git",
                 "url": "https://github.com/yiisoft/yii2-framework.git",
-                "reference": "e8094d1aa9e807fbea970bc1360ab836ffb1b738"
+                "reference": "a41aa56b75e8d21ef0152dad52b38ba57e65fd76"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yiisoft/yii2-framework/zipball/e8094d1aa9e807fbea970bc1360ab836ffb1b738",
-                "reference": "e8094d1aa9e807fbea970bc1360ab836ffb1b738",
+                "url": "https://api.github.com/repos/yiisoft/yii2-framework/zipball/a41aa56b75e8d21ef0152dad52b38ba57e65fd76",
+                "reference": "a41aa56b75e8d21ef0152dad52b38ba57e65fd76",
                 "shasum": ""
             },
             "require": {
@@ -303,7 +303,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-08-07T20:11:56+00:00"
+            "time": "2020-11-10T10:58:35+00:00"
         },
         {
             "name": "yiisoft/yii2-composer",
@@ -311,12 +311,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/yiisoft/yii2-composer.git",
-                "reference": "c372400aa6b6f2c52a82764496b37eb50d6e479f"
+                "reference": "b994e9678e34c2d17008c42a29fedb29d9ebf80b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yiisoft/yii2-composer/zipball/c372400aa6b6f2c52a82764496b37eb50d6e479f",
-                "reference": "c372400aa6b6f2c52a82764496b37eb50d6e479f",
+                "url": "https://api.github.com/repos/yiisoft/yii2-composer/zipball/b994e9678e34c2d17008c42a29fedb29d9ebf80b",
+                "reference": "b994e9678e34c2d17008c42a29fedb29d9ebf80b",
                 "shasum": ""
             },
             "require": {
@@ -372,7 +372,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-06-24T00:04:19+00:00"
+            "time": "2020-11-09T18:12:06+00:00"
         }
     ],
     "packages-dev": [],
