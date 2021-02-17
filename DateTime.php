@@ -8,7 +8,7 @@ use yii\base\BaseObject;
  * Utilità per oggetti di classe DateTime.
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @version 1.0.8
+ * @version 1.0.9
  */
 class DateTime extends BaseObject {
 
@@ -184,15 +184,20 @@ class DateTime extends BaseObject {
 
     /**
      * Restituisce una stringa in formato leggibile hh:mm:ss a partire da un numero di secondi.
+     * Se il secondo parametro è true restituisce la stringa in formato XhYmZs.
      * @param integer $seconds Numero di secondi
-     * @return string Stringa in formato hh:mm:ss
+     * @return string Stringa in formato hh:mm:ss oppure XhYmZs
      */
-    public static function GetTimeStringFromSeconds($seconds) {
+    public static function GetTimeStringFromSeconds($seconds, $humanReadable = false) {
         $s = '';
-        $hours = (int) $seconds / 3600;
+        $hours = (int) ($seconds / 3600);
         $minutes = (int) (($seconds % 3600) / 60);
         $seconds = (int) (($seconds % 3600) % 60);
-        return ($hours > 0 ? sprintf('%02d', $hours) : '00') . ':' . ($minutes > 0 ? sprintf('%02d', $minutes) : '00') . ':' . sprintf('%02d', $seconds);
+        if ($humanReadable === true) :
+            return ($hours > 0 ? $hours . 'h' : null) . ($minutes > 0 ? $minutes . 'm' : null) . ($seconds > 0 ? $seconds . 's' : null);
+        else :
+            return ($hours > 0 ? sprintf('%02d', $hours) : '00') . ':' . ($minutes > 0 ? sprintf('%02d', $minutes) : '00') . ':' . sprintf('%02d', $seconds);
+        endif;
     }
 
     /**
