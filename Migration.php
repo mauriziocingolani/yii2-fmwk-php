@@ -8,7 +8,7 @@ use yii\db\Schema;
  * Aggiunge costanti e funzionalità alla classe yii\db\Migration.
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @version 1.0.11
+ * @version 1.0.12
  */
 class Migration extends \yii\db\Migration {
 
@@ -118,6 +118,15 @@ class Migration extends \yii\db\Migration {
     }
 
     /**
+     * Restituisce la definizione di tipo per un float unsigned (eventualmente NOT NULL).
+     * @param boolean $notNull True per richiedere che il campo sia NOT NULL
+     * @return string Definizione di tipo per un float unsigned
+     */
+    protected static function typeUnsignedFloat($notNull = false) {
+        return 'FLOAT UNSIGNED' . ($notNull === true ? ' NOT NULL' : '');
+    }
+
+    /**
      * Restituisce la definizione di tipo per un text  (eventualmente NOT NULL).
      * @param boolean $notNull True per richiedere che il campo sia NOT NULL
      * @return string Definizione di tipo per un text
@@ -142,6 +151,15 @@ class Migration extends \yii\db\Migration {
      */
     protected static function typeUnsignedInteger($notNull = false) {
         return Schema::TYPE_INTEGER . ' UNSIGNED' . ($notNull === true ? ' NOT NULL' : '');
+    }
+
+    /**
+     * Restituisce la definizione di tipo per un intero big senza segno (eventualmente NOT NULL).
+     * @param boolean $notNull True per richiedere che il campo sia NOT NULL
+     * @return string Definizione di tipo per intero big senza segno
+     */
+    protected static function typeUnsignedBigInteger($notNull = false) {
+        return Schema::TYPE_BIGINT . ' UNSIGNED' . ($notNull === true ? ' NOT NULL' : '');
     }
 
     /**
