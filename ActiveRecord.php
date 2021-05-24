@@ -21,7 +21,7 @@ use yii\web\NotFoundHttpException;
  * 
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @version 1.1.2
+ * @version 1.1.3
  */
 abstract class ActiveRecord extends \yii\db\ActiveRecord {
 
@@ -248,6 +248,20 @@ abstract class ActiveRecord extends \yii\db\ActiveRecord {
             ],
             'value' => $expression ? $expression : new Expression('UTC_TIMESTAMP'),
         ];
+    }
+
+    /**
+     * Restituisce una stringa in cui ogni errore di validazione è racchiuso in un tag (default <li>).
+     * @return string Elenco errori di validazione
+     */
+    public function getErrorsList($tag = 'li') {
+        $messages = [];
+        foreach ($this->errors as $errs) :
+            foreach ($errs as $err) :
+                $messages[] = Html::tag($tag, $err);
+            endforeach;
+        endforeach;
+        return join('', $messages);
     }
 
     /**
