@@ -496,7 +496,7 @@ class Config extends BaseObject {
      */
     public function setHttps() {
         $this->setOnBeforeRequest(function ($event) {
-            if (!Yii::$app->request->isSecureConnection || strpos(Yii::$app->request->getAbsoluteUrl(), 'http://') !== false) {
+            if (strpos(Yii::$app->request->getAbsoluteUrl(), 'http://') !== false) {
                 Yii::$app->getResponse()->redirect(str_replace('http:', 'https:', Yii::$app->request->getAbsoluteUrl()));
                 Yii::$app->end();
             }
