@@ -14,7 +14,7 @@ use yii\web\UrlNormalizer;
  * @property string $version
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @version 1.0.27
+ * @version 1.0.28
  */
 class Config extends BaseObject {
 
@@ -495,8 +495,8 @@ class Config extends BaseObject {
      * https in caso di connessioni non sicure.
      */
     public function setHttps() {
-        $this->setOnBeforeRequest(function($event) {
-            if (!Yii::$app->request->isSecureConnection) {
+        $this->setOnBeforeRequest(function ($event) {
+            if (!Yii::$app->request->isSecureConnection || strpos(Yii::$app->request->getAbsoluteUrl(), 'http://') !== false) {
                 Yii::$app->getResponse()->redirect(str_replace('http:', 'https:', Yii::$app->request->getAbsoluteUrl()));
                 Yii::$app->end();
             }
