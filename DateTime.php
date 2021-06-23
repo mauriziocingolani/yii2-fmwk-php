@@ -8,7 +8,7 @@ use yii\base\BaseObject;
  * Utilità per oggetti di classe DateTime.
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @version 1.0.9
+ * @version 1.0.10
  */
 class DateTime extends BaseObject {
 
@@ -197,6 +197,20 @@ class DateTime extends BaseObject {
             return ($hours > 0 ? $hours . 'h' : null) . ($minutes > 0 ? $minutes . 'm' : null) . ($seconds > 0 ? $seconds . 's' : null);
         else :
             return ($hours > 0 ? sprintf('%02d', $hours) : '00') . ':' . ($minutes > 0 ? sprintf('%02d', $minutes) : '00') . ':' . sprintf('%02d', $seconds);
+        endif;
+    }
+
+    /**
+     * Restituisce una stringa in formato leggibile hh:mm:ss a partire da un numero di secondi.
+     * Se il secondo parametro è true restituisce la stringa in formato XhYmZs.
+     * @param \DateInterval $diff Oggetto DateInterval
+     * @return string Stringa in formato hh:mm:ss oppure XhYmZs
+     */
+    public static function GetTimeString(\DateInterval $diff, $humanReadable = false) {
+        if ($humanReadable === true) :
+            return ($diff->h > 0 ? $diff->h . 'h' : null) . ($diff->m > 0 ? $diff->m . 'm' : null) . ($diff->s > 0 ? $diff->s . 's' : null);
+        else :
+            return ($diff->h > 0 ? sprintf('%02d', $diff->h) : '00') . ':' . ($diff->m > 0 ? sprintf('%02d', $diff->m) : '00') . ':' . sprintf('%02d', $diff->s); 
         endif;
     }
 
