@@ -8,7 +8,7 @@ use yii\validators\Validator;
  * Validatore per campi che contengono un codice fiscale.
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @version 1.0.5
+ * @version 1.0.6
  * @link http://blog.marketto.it/2016/01/regex-validazione-codice-fiscale-con-omocodia/ Fonte regex di validazione
  */
 class FiscalCodeValidator extends Validator {
@@ -87,10 +87,22 @@ class FiscalCodeValidator extends Validator {
     }
 
     public function clientValidateAttribute($model, $attribute, $view) {
-        return
-                "if (value.length>0 && !value.match({$this->_regex})) {" .
-                "   messages.push('" . preg_replace('/\'/', "\'", $this->message) . "');" .
-                "}";
+        $even = json_encode(self::EVEN);
+        $odd = json_encode(self::ODD);
+        $rest = json_encode(self::REST);
+        return <<<JS
+                if (value.length>0 && !value.match({$this->_regex})) {
+                    messages.push("$this->message");
+                }
+                var sum=0,even=$even,odd=$odd,rest=$rest;
+                console.log(odd,even);
+                for(i=0;i<15;i++) {
+                        sum+= (i%2==0 ? odd[value[i]]:even[value[i]]);
+                }
+                if(rest[sum%26]!=value[15]) {
+                        messages.push("$this->controlCharacterMessage");
+                }        
+        JS;
     }
 
 }
