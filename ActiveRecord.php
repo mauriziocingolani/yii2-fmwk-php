@@ -21,7 +21,7 @@ use yii\web\NotFoundHttpException;
  * 
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @version 1.1.3
+ * @version 1.1.4
  */
 abstract class ActiveRecord extends \yii\db\ActiveRecord {
 
@@ -204,13 +204,16 @@ abstract class ActiveRecord extends \yii\db\ActiveRecord {
      * Restituisce l'array con i parametri di configurazione per SluggableBehavior.
      * @param mixed $attributes Nome del campo (o array con i nomi) da cui creare lo slug
      * @param string $slugAttribute Nome del campo con lo slug
+     * @param boolean $ensureUnique Se true essicura che lo slug non sia duplicato
+     * @param boolean $immutable Se true impedisce che lo slug venga modificato una volta creato
      * @return array Configurazione del behavior
      */
-    public function getSluggableBehavior($attributes, $slugAttribute, $ensureUnique = false) {
+    public function getSluggableBehavior($attributes, $slugAttribute, $ensureUnique = false, $immutable = false) {
         return ['class' => SluggableBehavior::className(),
             'attribute' => $attributes,
             'slugAttribute' => $slugAttribute,
             'ensureUnique' => $ensureUnique,
+            'immutable' => $immutable,
         ];
     }
 
