@@ -8,7 +8,7 @@ use yii\validators\Validator;
  * Validatore per campi che contengono un codice fiscale.
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @version 1.0.7
+ * @version 1.0.8
  * @link http://blog.marketto.it/2016/01/regex-validazione-codice-fiscale-con-omocodia/ Fonte regex di validazione
  */
 class FiscalCodeValidator extends Validator {
@@ -91,16 +91,19 @@ class FiscalCodeValidator extends Validator {
         $odd = json_encode(self::ODD);
         $rest = json_encode(self::REST);
         return <<<JS
-                if (value.length>0 && !value.match({$this->_regex})) {
-                    messages.push("$this->message");
+                if(value.length>0) {
+                        if (!value.match({$this->_regex})) {
+                                messages.push("$this->message");
+                        } else {
+                                var sum=0,even=$even,odd=$odd,rest=$rest;
+                                for(i=0;i<15;i++) {
+                                        sum+= (i%2==0 ? odd[value[i].toUpperCase()]:even[value[i].toUpperCase()]);
+                                }
+                                if(rest[sum%26]!=value[15].toUpperCase()) {
+                                        messages.push("$this->controlCharacterMessage");
+                                }  
+                        }
                 }
-                var sum=0,even=$even,odd=$odd,rest=$rest;
-                for(i=0;i<15;i++) {
-                        sum+= (i%2==0 ? odd[value[i].toUpperCase()]:even[value[i].toUpperCase()]);
-                }
-                if(rest[sum%26]!=value[15].toUpperCase()) {
-                        messages.push("$this->controlCharacterMessage");
-                }        
         JS;
     }
 
