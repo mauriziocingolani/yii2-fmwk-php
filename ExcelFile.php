@@ -29,7 +29,7 @@ use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
  * @property array $headers
  * 
  * @author Maurizio Cingolani
- * @version 1.0.1
+ * @version 1.0.2
  */
 class ExcelFile extends BaseObject implements \Iterator {
 
@@ -81,7 +81,7 @@ class ExcelFile extends BaseObject implements \Iterator {
      * stesso nome delle intestazioni di  colonna.
      * @return stdClass Oggetto che rappresenta la riga del file Excel
      */
-    public function current() {
+    public function current(): mixed {
         $c = new \stdClass();
         for ($column = 1; $column <= $this->_maxColumn; $column++) :
             $cell = $this->_sheet->getCellByColumnAndRow($column, $this->_position);
@@ -96,21 +96,21 @@ class ExcelFile extends BaseObject implements \Iterator {
      * Restituisce la riga attuale.
      * @return integer Riga attuale
      */
-    public function key() {
+    public function key(): mixed {
         return $this->_position;
     }
 
     /**
      * Passa alla riga successiva.
      */
-    public function next() {
+    public function next(): void {
         ++$this->_position;
     }
 
     /**
      * Ritorna all'inizio del foglio attuale (ovvero alla seconda riga).
      */
-    public function rewind() {
+    public function rewind(): void {
         $this->_position = 2;
     }
 
@@ -119,7 +119,7 @@ class ExcelFile extends BaseObject implements \Iterator {
      * il numero totale di righe.
      * @return boolean true se la riga attuale è valida
      */
-    public function valid() {
+    public function valid(): bool {
         return $this->_position <= $this->_maxRow;
     }
 
@@ -140,5 +140,4 @@ class ExcelFile extends BaseObject implements \Iterator {
         endfor;
         $this->rewind();
     }
-
 }
