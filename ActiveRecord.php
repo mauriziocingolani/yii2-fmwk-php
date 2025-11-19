@@ -21,7 +21,7 @@ use yii\web\NotFoundHttpException;
  * 
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @version 1.1.4
+ * @version 1.1.5
  */
 abstract class ActiveRecord extends \yii\db\ActiveRecord {
 
@@ -352,10 +352,11 @@ abstract class ActiveRecord extends \yii\db\ActiveRecord {
      * @param integer $pk Chiave primaria del record da trovare
      * @param array $with Relazioni da popolare
      * @param string $missingMessage Messaggio da associare all'eccezione sollevata in caso di record inesistente.
+     * @param array $newModelParams Elenco di proprietà con cui inizializzare il nuovo modello
      * @return \static
      * @throws NotFoundHttpException Se non esiste un record con la chiave primaria indicata
      */
-    public static function FindByPk($pk, array $with = null, $missingMessage = null) {
+    public static function FindByPk($pk, array $with = null, $missingMessage = null, array $newModelParams = null) {
         if ($pk) :
             $query = static::find()->where(static::primaryKey()[0] . '=:id', ['id' => $pk]);
             if ($with)
@@ -365,7 +366,7 @@ abstract class ActiveRecord extends \yii\db\ActiveRecord {
                 throw new NotFoundHttpException($missingMessage ? $missingMessage : StringHelper::basename(static::className()) . ' inesistente.');
             return $model;
         endif;
-        return new static;
+        return new static($newModelParams);
     }
 
     /**
@@ -392,5 +393,4 @@ abstract class ActiveRecord extends \yii\db\ActiveRecord {
             return $ex->getMessage();
         }
     }
-
 }
