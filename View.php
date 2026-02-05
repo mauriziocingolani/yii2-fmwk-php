@@ -112,7 +112,7 @@ class View extends \yii\web\View {
      * utilizzare il metodo per due diversi blocchi di messaggi nella stessa pagina.
      * @param string[] $allowedTypes Nomi dei flash consentiti
      */
-    public function addFlashDivs(array $allowedTypes = null) {
+    public function addFlashDivs(?array $allowedTypes = null) {
         # analizzo i messaggi flash uno a uno
         foreach (Yii::$app->session->allFlashes as $type => $messages) :
             if (isset($allowedTypes) && array_search($type, $allowedTypes) === false)

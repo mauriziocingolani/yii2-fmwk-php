@@ -40,7 +40,7 @@ class Calendar extends BaseObject {
      * @param string $format Formato della data (opzionale)
      * @return \DateTime|string Primo giorno del mese
      */
-    public function getFirstDayOfMonth(string $format = null) {
+    public function getFirstDayOfMonth(?string $format = null) {
         if (is_null($this->_firstDayOfMonth))
             $this->_firstDayOfMonth = new \DateTime(date(sprintf('%d-%02d-01', $this->_year, $this->_month)));
         if ($format)
@@ -54,7 +54,7 @@ class Calendar extends BaseObject {
      * @param string $format Formato della data (opzionale)
      * @return \DateTime|string Ultimo giorno del mese
      */
-    public function getLastDayOfMonth(string $format = null) {
+    public function getLastDayOfMonth(?string $format = null) {
         if (is_null($this->_lastDayOfMonth))
             $this->_lastDayOfMonth = new \DateTime(date('Y-m-t', strtotime($this->getFirstDayOfMonth('Y-m-d'))));
         if ($format)
@@ -120,7 +120,7 @@ class Calendar extends BaseObject {
      * @param string $format Formato della data (opzionale)
      * @return \DateTime|string Primo giorno della prima settimana del mese
      */
-    public function getFirstDayOfFirstWeek(string $format = null) {
+    public function getFirstDayOfFirstWeek(?string $format = null) {
         if (is_null($this->_firstDayOfFirstWeek))
             $this->_firstDayOfFirstWeek = (new \DateTime)->setISODate($this->getFirstWeekYear(), $this->getFirstWeek());
         if ($format)
@@ -134,7 +134,7 @@ class Calendar extends BaseObject {
      * @param string $format Formato della data (opzionale)
      * @return \DateTime|string Ultimo giorno dell'ultima settimana del mese
      */
-    public function getLastDayOfLastWeek(string $format = null) {
+    public function getLastDayOfLastWeek(?string $format = null) {
         if (is_null($this->_lastDayOfLastWeek)) :
             $date = (new \DateTime)->setISODate($this->getLastWeekYear(), $this->getLastWeek());
             $this->_lastDayOfLastWeek = $date->add(new \DateInterval('P6D'));

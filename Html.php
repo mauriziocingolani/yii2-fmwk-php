@@ -202,7 +202,7 @@ class Html extends \yii\helpers\Html {
      * @param array $options Opzioni HTML
      * @return string Tag generato
      */
-    public static function splitSubmitButton($icon, $text, $type, $size = null, array $options = null) {
+    public static function splitSubmitButton($icon, $text, $type, $size = null, ?array $options = null) {
         $opts = ['class' => "btn btn-$type btn-icon-split" . ($size ? " btn-$size" : null)];
         if (is_array($options)) :
             # se è stato impostato class lo appendo 

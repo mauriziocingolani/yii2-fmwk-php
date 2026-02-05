@@ -142,7 +142,7 @@ class DateTime extends BaseObject {
      * @param type $showSeconds <code>true</code> per comprendere anche i secondi
      * @return string Stringa che rappresenta la durata
      */
-    public static function GetDateIntervalString(\DateInterval $diff = null, $forceShowSeconds = false) {
+    public static function GetDateIntervalString(?\DateInterval $diff = null, $forceShowSeconds = false) {
         if ($diff == null)
             return null;
         $s = [];
@@ -210,7 +210,7 @@ class DateTime extends BaseObject {
         if ($humanReadable === true) :
             return ($diff->h > 0 ? $diff->h . 'h' : null) . ($diff->m > 0 ? $diff->m . 'm' : null) . ($diff->s > 0 ? $diff->s . 's' : null);
         else :
-            return ($diff->h > 0 ? sprintf('%02d', $diff->h) : '00') . ':' . ($diff->m > 0 ? sprintf('%02d', $diff->m) : '00') . ':' . sprintf('%02d', $diff->s); 
+            return ($diff->h > 0 ? sprintf('%02d', $diff->h) : '00') . ':' . ($diff->m > 0 ? sprintf('%02d', $diff->m) : '00') . ':' . sprintf('%02d', $diff->s);
         endif;
     }
 
@@ -231,5 +231,4 @@ class DateTime extends BaseObject {
     public static function ItalianToMySQL($dateString) {
         return join('-', array_reverse(preg_split('/\//', $dateString)));
     }
-
 }

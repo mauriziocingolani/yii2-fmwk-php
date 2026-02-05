@@ -356,7 +356,7 @@ abstract class ActiveRecord extends \yii\db\ActiveRecord {
      * @return \static
      * @throws NotFoundHttpException Se non esiste un record con la chiave primaria indicata
      */
-    public static function FindByPk($pk, array $with = null, $missingMessage = null, array $newModelParams = null) {
+    public static function FindByPk($pk, ?array $with = null, $missingMessage = null, ?array $newModelParams = null) {
         if ($pk) :
             $query = static::find()->where(static::primaryKey()[0] . '=:id', ['id' => $pk]);
             if ($with)
