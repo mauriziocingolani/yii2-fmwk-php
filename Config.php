@@ -14,7 +14,7 @@ use yii\web\UrlNormalizer;
  * @property string $version
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @version 1.0.28
+ * @version 1.0.29
  */
 class Config extends BaseObject {
 
@@ -244,7 +244,7 @@ class Config extends BaseObject {
      * @param array $params Parametri di configurazione ('sessionTable','timeout','cookieParams')
      * @return \mauriziocingolani\yii2fmwkphp\Config Oggetto corrente (per concatenamento)
      */
-    public function addSessionComponent(array $params = null) {
+    public function addSessionComponent(?array $params = null) {
         $this->_components['session'] = [
             'class' => 'yii\web\DbSession',
             'sessionTable' => is_array($params) && isset($params['sessionTable']) ? $params['sessionTable'] : 'YiiSessions',
@@ -294,7 +294,7 @@ class Config extends BaseObject {
      * @param array $identityCookie Array per la configurazione del cookie di identità (opzionale)
      * @return \mauriziocingolani\yii2fmwkphp\Config Oggetto corrente (per concatenamento)
      */
-    public function addUserComponent($identityClass = 'app\modules\user\models\User', $appUserClass = 'app\components\AppUser', array $identityCookie = null) {
+    public function addUserComponent($identityClass = 'app\modules\user\models\User', $appUserClass = 'app\components\AppUser', ?array $identityCookie = null) {
         $this->_components['user'] = [
             'class' => $appUserClass,
             'enableAutoLogin' => true,
