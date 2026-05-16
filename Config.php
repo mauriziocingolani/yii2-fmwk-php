@@ -14,7 +14,7 @@ use yii\web\UrlNormalizer;
  * @property string $version
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @version 1.0.29
+ * @version 1.0.30
  */
 class Config extends BaseObject {
 
@@ -101,12 +101,12 @@ class Config extends BaseObject {
                 'class' => 'app\modules\migrate\migrate',
             ]
         ];
-        if (YII_DEBUG)
+        if (defined('YII_DEBUG') && YII_DEBUG)
             $this->_modules['debug'] = [
                 'class' => 'yii\debug\Module',
                 'allowedIPs' => ['*'],
             ];
-        if (OFFLINE)
+        if (defined('YII_DEBUG') && OFFLINE)
             $this->_catchAll = [
                 'site/offline',
             ];
@@ -279,6 +279,7 @@ class Config extends BaseObject {
      * Aggiunge il componente per la visualizzazione dei tweet relativi all'applicazione.
      * I parametri di configurazione vengono caricati dal file 'twitter.php' (presente nella cartella dei files di configurazione).
      * @return \mauriziocingolani\yii2fmwkphp\Config Oggetto corrente (per concatenamento)
+     * @deprecated since version 1.0.30
      */
     public function addTwitterComponent() {
         $this->_components['twitter'] = require $this->_configFolder . 'twitter.php';
@@ -363,7 +364,7 @@ class Config extends BaseObject {
      * gestione ruoli e utenti).
      * Di default la classe che rappresenta un utente dell'applicazione è 'app\modules\user\User'; per modificarla
      * si usa l'elemento 'class' dell'array di configurazione.
-     * @param array $options Opzioni di configurazione 
+     * @param array $options Opzioni di configurazione
      * @param boolean $new True per utilizzare il nuovo modulo
      * @return \mauriziocingolani\yii2fmwkphp\Config Oggetto corrente (per concatenamento)
      */
@@ -428,7 +429,6 @@ class Config extends BaseObject {
             'components' => $this->_components,
             'modules' => $this->_modules,
             'params' => $this->_params,
-            'catchAll' => $this->_catchAll,
         ];
         if ($this->_controllerNamespace)
             $conf['controllerNamespace'] = $this->_controllerNamespace;
@@ -549,9 +549,17 @@ class Config extends BaseObject {
      * @param string $timeZone Valore della proprietà {@link $timeZone}
      * @return \mauriziocingolani\yii2fmwkphp\Config Oggetto corrente (per concatenamento)
      */
-    public function setTImezone($timeZone) {
+    public function setTimezone($timeZone) {
         $this->_timeZone = $timeZone;
         return $this;
+    }
+
+    /**
+     * Vecchio metodo con refuso nel nome.
+     * @deprecated use setTimezone()
+     */
+    public function setTImezone($timeZone) {
+        return $this->setTimezone($timeZone);
     }
 
     /**
@@ -563,5 +571,4 @@ class Config extends BaseObject {
         $this->_version = $version;
         return $this;
     }
-
 }
