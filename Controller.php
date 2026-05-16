@@ -8,21 +8,17 @@ use Yii;
  * Estende la classe Controller aggiungendo alcune funzionalità.
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @version 1.0.3
+ * @version 1.0.4
  */
 class Controller extends \yii\web\Controller {
 
     /**
-     * Implementazione base delle regole di accesso: tutto consentito.
+     * Implementazione base delle regole di accesso: tutto consentito. # MODIFICATO!
+     * Il metodo non fa nulla. L'impostazione del controlo di accesso viene fatta con {@link accessRules()}.
      * @return array Behaviors
      */
     public function behaviors() {
-        return [
-            'access' => [
-                'class' => \yii\filters\AccessControl::className(),
-                'rules' => [['allow' => true]],
-            ],
-        ];
+        return parent::behaviors();
     }
 
     /**
@@ -33,8 +29,11 @@ class Controller extends \yii\web\Controller {
      * @return array Regole di accesso (come behavior)
      */
     public function accessRules(array $rules) {
-        $default = self::behaviors();
-        $default['access']['rules'] = $rules;
+        $default = $this->behaviors();
+        $default['access'] = [
+            'class' => \yii\filters\AccessControl::className(),
+            'rules' => $rules,
+        ];
         return $default;
     }
 
@@ -61,5 +60,4 @@ class Controller extends \yii\web\Controller {
         endif;
         return true;
     }
-
 }
