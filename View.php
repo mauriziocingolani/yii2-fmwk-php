@@ -10,7 +10,7 @@ use mauriziocingolani\yii2fmwkphp\Html;
  * Estende la classe View aggiungendo alcune funzionalità.
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @version 1.0.21
+ * @version 1.0.22
  */
 class View extends \yii\web\View {
 
@@ -210,11 +210,11 @@ class View extends \yii\web\View {
      * @throws ViewNotFoundException Se il file della view non esiste
      */
     public function renderInclude($view, $params = [], $context = null) {
-        if (strtoupper(substr(PHP_OS, 0, 3) === 'WIN')) :
-            $viewFile = preg_replace('/\\\views\\\/', '\views-include\\', $this->findViewFile($view, $context));
-        else :
-            $viewFile = preg_replace('/\/views\//', '/views-include/', $this->findViewFile($view, $context));
-        endif;
+        $viewFile = str_replace(
+                [DIRECTORY_SEPARATOR . 'views' . DIRECTORY_SEPARATOR],
+                [DIRECTORY_SEPARATOR . 'views-include' . DIRECTORY_SEPARATOR],
+                $this->findViewFile($view, $context)
+        );
         return $this->renderFile($viewFile, $params, $context);
     }
 
@@ -240,5 +240,4 @@ class View extends \yii\web\View {
             $this->registerLinkTag(['rel' => 'apple-touch-icon-precomposed', 'sizes' => $size, 'href' => "/img/apple-icon-$size-precomposed.$extension"], $key);
         endforeach;
     }
-
 }
