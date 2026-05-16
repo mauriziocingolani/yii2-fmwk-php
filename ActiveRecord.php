@@ -21,7 +21,7 @@ use yii\web\NotFoundHttpException;
  * 
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @version 1.1.5
+ * @version 1.1.6
  */
 abstract class ActiveRecord extends \yii\db\ActiveRecord {
 
@@ -93,12 +93,14 @@ abstract class ActiveRecord extends \yii\db\ActiveRecord {
      * @return string Paragrafo con informazioni di creazione e modifica
      */
     public function getCreatedUpdatedParagraph($isFemale = false, $options = null) {
+        $creatorName = $this->CreatedBy && isset($this->creator) ? Html::encode($this->creator->UserName) : null;
+        $updaterName = isset($this->UpdatedBy) && $this->UpdatedBy && isset($this->updater) ? Html::encode($this->updater->UserName) : null;
         $s = 'Creat' . ($isFemale ? 'a' : 'o') . ' il ' . date('d-m-Y', strtotime($this->Created)) .
-                ($this->CreatedBy ? " da <strong>{$this->creator->UserName}</strong>" : null);
+                ($this->CreatedBy ? " da <strong>$creatorName</strong>" : null);
         if (isset($this->Updated) && $this->Updated)
             $s .= Html::tag('br') .
                     'Ultima modifica il ' . date('d-m-Y', strtotime($this->Updated)) .
-                    ($this->UpdatedBy ? " da parte di <strong>{$this->updater->UserName}</strong>" : null);
+                    ($this->UpdatedBy ? " da parte di <strong>$updaterName</strong>" : null);
         if ($options) :
             $options['class'] = isset($options['class']) ? $options['class'] . ' created' : 'created';
         else :
