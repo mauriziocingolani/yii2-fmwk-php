@@ -1,13 +1,21 @@
 <?php
 
 use yii\helpers\ArrayHelper;
+use yii\web\ForbiddenHttpException;
+use mauriziocingolani\yii2fmwkphp\{
+    AppWebUser,
+    Html
+};
 
 /**
  * Elenco delle proprietà di sistema del server.
+ * Deve essere accessibile soltanto a utenti con ruolo Developer (regola da implementare esternamente).
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @version 1.0.1
+ * @version 1.0.2
  */
+if (Yii::$app->user->isGuest || !(Yii::$app->user instanceof \mauriziocingolani\yii2fmwkphp\AppWebUser))
+    throw new ForbiddenHttpException('Accesso non consentito.');
 ?>
 
 <h3>Server</h3>
@@ -15,11 +23,11 @@ use yii\helpers\ArrayHelper;
     <tbody>
         <tr>
             <td>IP</td>
-            <th><?= $_SERVER['SERVER_ADDR']; ?></th>
+            <th><?= Html::encode($_SERVER['SERVER_ADDR']); ?></th>
         </tr>
         <tr>
             <td>WebServer</td>
-            <th><?= $_SERVER['SERVER_SOFTWARE']; ?></th>
+            <th><?= Html::encode($_SERVER['SERVER_SOFTWARE']); ?></th>
         </tr>
         <tr>
             <td>PHP</td>
@@ -47,19 +55,19 @@ if (Yii::$app->has('db') && Yii::$app->db->isActive) :
         <tbody>
             <tr>
                 <td>Server</td>
-                <th><?= $variables['version_comment']; ?></th>
+                <th><?= Html::encode($variables['version_comment']); ?></th>
             </tr>
             <tr>
                 <td>Versione</td>
-                <th><?= $variables['version']; ?></th>
+                <th><?= Html::encode($variables['version']); ?></th>
             </tr>
             <tr>
                 <td>OS</td>
-                <th><?= $variables['version_compile_os']; ?></th>
+                <th><?= Html::encode($variables['version_compile_os']); ?></th>
             </tr>
             <tr>
                 <td>Macchina</td>
-                <th><?= $variables['version_compile_machine']; ?></th>
+                <th><?= Html::encode($variables['version_compile_machine']); ?></th>
             </tr>
         </tbody>
     </table>
@@ -70,11 +78,11 @@ if (Yii::$app->has('db') && Yii::$app->db->isActive) :
     <tbody>
         <tr>
             <td>IP</td>
-            <th><?= Yii::$app->request->userIP; ?></th>
+            <th><?= Html::encode(Yii::$app->request->userIP); ?></th>
         </tr>
         <tr>
             <td>Browser</td>
-            <th><?= Yii::$app->request->userAgent; ?></th>
+            <th><?= Html::encode(Yii::$app->request->userAgent); ?></th>
         </tr>
     </tbody>
 </table>
