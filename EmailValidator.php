@@ -20,6 +20,9 @@ class EmailValidator extends \yii\validators\EmailValidator {
     /** Valore restituito dal metodo {@link validateValueWithResponse} se il dominio dell'indirizzo non esiste */
     const ERROR_DOMAIN = 'domain';
 
+    /** Cache statica per evitare di interrogare lo stesso dominio due volte nella stessa richiesta. */
+    private static $_domainCache = [];
+
     /**
      * Esegue la validazione utilizzando il metodo della superclass, ma in più (se richiesto esplicitamente 
      * tramite il parametro $checkDomain) verifica l'esistenza del dominio utilizzando la funzione checkdnsrr().
@@ -29,16 +32,16 @@ class EmailValidator extends \yii\validators\EmailValidator {
      * @return boolean Risultato della validazione
      */
     public function validateValue($value, $checkDomain = false) {
-        if ($value == null || strlen(trim($value)) == 0)
+        if ($value === null || trim((string) $value) === '')
             return true;
-        if (parent::validateValue($value) === null) :
-            if ($checkDomain === true) :
-                list($address, $host) = explode('@', $value);
-                return checkdnsrr($host);
-            endif;
+        if (parent::validateValue($value) !== null)
+            return false;
+        if ($checkDomain !== true)
             return true;
-        endif;
-        return false;
+        $parts = explode('@', (string) $value);
+        if (count($parts) !== 2 || $parts[1] === '')
+            return false;
+        return $this->_domainExists($parts[1]);
     }
 
     /**
@@ -55,16 +58,27 @@ class EmailValidator extends \yii\validators\EmailValidator {
      * @return string Errore di validazione (vedi costanti della classe)
      */
     public function validateValueWithResponse($value, $checkDomain = false) {
-        if ($value == null || strlen(trim($value)) == 0)
+        if ($value === null || trim((string) $value) === '')
             return self::ERROR_NONE;
-        if (parent::validateValue($value) === null) :
-            if ($checkDomain === true) :
-                list($address, $host) = explode('@', $value);
-                return checkdnsrr($host) ? self::ERROR_NONE : self::ERROR_DOMAIN;
-            endif;
+        if (parent::validateValue($value) !== null)
+            return self::ERROR_SYNTAX;
+        if ($checkDomain !== true)
             return self::ERROR_NONE;
-        endif;
-        return self::ERROR_SYNTAX;
+        $parts = explode('@', (string) $value);
+        if (count($parts) !== 2 || $parts[1] === '')
+            return self::ERROR_SYNTAX;
+        return $this->_domainExists($parts[1]) ? self::ERROR_NONE : self::ERROR_DOMAIN;
     }
 
+    private function _domainExists(string $host): bool {
+        $host = strtolower($host);
+        if (array_key_exists($host, self::$_domainCache))
+            return self::$_domainCache[$host];
+        try {
+            $exists = checkdnsrr($host, 'MX') || checkdnsrr($host, 'A');
+        } catch (\Throwable $e) {
+            $exists = false;
+        }
+        return self::$_domainCache[$host] = $exists;
+    }
 }
