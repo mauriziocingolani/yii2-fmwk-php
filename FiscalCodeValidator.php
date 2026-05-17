@@ -2,6 +2,7 @@
 
 namespace mauriziocingolani\yii2fmwkphp;
 
+use yii\helpers\Json;
 use yii\validators\Validator;
 
 /**
@@ -90,17 +91,19 @@ class FiscalCodeValidator extends Validator {
         $even = json_encode(self::EVEN);
         $odd = json_encode(self::ODD);
         $rest = json_encode(self::REST);
+        $message = Json::htmlEncode($this->message);
+        $controlMessage = Json::htmlEncode($this->controlCharacterMessage);
         return <<<JS
                 if(value.length>0) {
                         if (!value.match({$this->_regex})) {
-                                messages.push("$this->message");
+                                messages.push("$message");
                         } else {
                                 var sum=0,even=$even,odd=$odd,rest=$rest;
-                                for(i=0;i<15;i++) {
+                                for(var i=0;i<15;i++) {
                                         sum+= (i%2==0 ? odd[value[i].toUpperCase()]:even[value[i].toUpperCase()]);
                                 }
                                 if(rest[sum%26]!=value[15].toUpperCase()) {
-                                        messages.push("$this->controlCharacterMessage");
+                                        messages.push("$controlCharacterMessage");
                                 }  
                         }
                 }
