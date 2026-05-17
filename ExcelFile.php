@@ -3,6 +3,7 @@
 namespace mauriziocingolani\yii2fmwkphp;
 
 use yii\base\BaseObject;
+use yii\base\InvalidArgumentException;
 use PhpOffice\PhpSpreadsheet;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
@@ -46,7 +47,20 @@ class ExcelFile extends BaseObject implements \Iterator {
      * @param string $filePath Percorso del file Excel
      */
     public function __construct($filePath) {
-        $this->_spreadsheet = IOFactory::load($filePath);
+        if (!is_string($filePath) || !is_file($filePath) || !is_readable($filePath))
+            throw new InvalidArgumentException('File Excel non trovato o non leggibile.');
+        $ext = strtolower(pathinfo($filePath, PATHINFO_EXTENSION));
+        if (!in_array($ext, ['xlsx', 'xls', 'csv', 'ods'], true))
+            throw new InvalidArgumentException("Estensione file non consentita: $ext");
+        $reader = IOFactory::createReaderForFile($filePath);
+        $reader->setReadDataOnly(true); # ignora formattazione
+        if (method_exists($reader, 'setReadEmptyCells'))
+            $reader->setReadEmptyCells(false);
+        # Disabilita esplicitamente XML external entities (PhpSpreadsheet 1.x lo fa già di default ma è bene esplicitarlo)
+        if (method_exists($reader, 'setSecurityScannerDisabled'))
+            $reader->setSecurityScannerDisabled(false);
+
+        $this->_spreadsheet = $reader->load($filePath);
         $this->_nsheets = $this->_spreadsheet->getSheetCount();
         $this->_initSheet(0);
     }
@@ -86,8 +100,13 @@ class ExcelFile extends BaseObject implements \Iterator {
         for ($column = 1; $column <= $this->_maxColumn; $column++) :
             $cell = $this->_sheet->getCellByColumnAndRow($column, $this->_position);
             $prop = $this->_headers[$column];
-            if ($prop != null)
-                $c->$prop = $cell->getValue();
+            if ($prop != null) :
+                $value = $cell->getValue();
+                // anti formula injection se questi dati verranno riesportati o stampati
+                if (is_string($value) && strlen($value) > 0 && in_array($value[0], ['=', '+', '-', '@'], true))
+                    $value = "'" . $value;
+                $c->$prop = $value;
+            endif;
         endfor;
         return $c;
     }
