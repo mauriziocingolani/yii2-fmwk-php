@@ -8,7 +8,7 @@ use Yii;
  * Estende la classe Controller aggiungendo alcune funzionalità.
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @version 1.0.4
+ * @version 1.0.5
  */
 class Controller extends \yii\web\Controller {
 
@@ -29,7 +29,7 @@ class Controller extends \yii\web\Controller {
      * @return array Regole di accesso (come behavior)
      */
     public function accessRules(array $rules) {
-        $default = $this->behaviors();
+        $default = parent::behaviors();
         $default['access'] = [
             'class' => \yii\filters\AccessControl::className(),
             'rules' => $rules,
