@@ -14,7 +14,7 @@ use yii\web\UrlNormalizer;
  * @property string $version
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @version 1.0.30
+ * @version 1.0.31
  */
 class Config extends BaseObject {
 
@@ -552,14 +552,6 @@ class Config extends BaseObject {
     public function setTimezone($timeZone) {
         $this->_timeZone = $timeZone;
         return $this;
-    }
-
-    /**
-     * Vecchio metodo con refuso nel nome.
-     * @deprecated use setTimezone()
-     */
-    public function setTImezone($timeZone) {
-        return $this->setTimezone($timeZone);
     }
 
     /**
