@@ -9,7 +9,7 @@ use yii\validators\Validator;
  * Validatore per campi di tipo data-ora. INCOMPLETO
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @version 1.0.2
+ * @version 1.0.3
  * @see https://github.com/nepstor/yii2-datetime-compare-validator
  */
 class DateTimeValidator extends Validator {
@@ -54,6 +54,10 @@ class DateTimeValidator extends Validator {
             $value = DateTime::ItalianToMySQL($value);
             $compare = DateTime::ItalianToMySQL($model->$cA);
         endif;
+        if ($value === null || $compare === null) :
+            $this->addError($model, $attribute, $this->message ?? "Il valore di $attribute o $cA non è valido");
+            return;
+        endif;
         # validazione
         $message = null;
         switch ($this->operator) {
@@ -87,5 +91,4 @@ class DateTimeValidator extends Validator {
         if (!empty($message))
             $this->addError($model, $attribute, $message);
     }
-
 }

@@ -8,7 +8,7 @@ use yii\base\BaseObject;
  * Utilità per oggetti di classe DateTime.
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @version 1.0.10
+ * @version 1.0.11
  */
 class DateTime extends BaseObject {
 
@@ -94,6 +94,8 @@ class DateTime extends BaseObject {
      * @return integer Numero del mese
      */
     public static function GetMonthNumber($monthString) {
+        if ($monthString === null || $monthString === '')
+            return false;
         return array_search(strtolower($monthString), self::$_italianMonths);
     }
 
@@ -220,6 +222,8 @@ class DateTime extends BaseObject {
      * @return string Data in formato italiano
      */
     public static function MySQLToItalian($dateString) {
+        if ($dateString === null || $dateString === '')
+            return null;
         return join('/', array_reverse(preg_split('/-/', $dateString)));
     }
 
@@ -229,6 +233,8 @@ class DateTime extends BaseObject {
      * @return string Data in formato MySQL
      */
     public static function ItalianToMySQL($dateString) {
+        if ($dateString === null || $dateString === '')
+            return null;
         return join('-', array_reverse(preg_split('/\//', $dateString)));
     }
 }

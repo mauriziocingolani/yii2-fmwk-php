@@ -10,7 +10,7 @@ use mauriziocingolani\yii2fmwkphp\Html;
  * Estende la classe View aggiungendo alcune funzionalità.
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @version 1.0.22
+ * @version 1.0.23
  */
 class View extends \yii\web\View {
 
@@ -115,6 +115,7 @@ class View extends \yii\web\View {
     public function addFlashDivs(?array $allowedTypes = null) {
         # analizzo i messaggi flash uno a uno
         foreach (Yii::$app->session->allFlashes as $type => $messages) :
+            $type = (string) $type;
             if (isset($allowedTypes) && array_search($type, $allowedTypes) === false)
                 continue;# non visualizzo il flash se non è compreso tra quelli consentiti
             if (($i = strpos($type, '_')) !== false)

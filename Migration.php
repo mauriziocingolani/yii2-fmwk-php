@@ -8,7 +8,7 @@ use yii\db\Schema;
  * Aggiunge costanti e funzionalità alla classe yii\db\Migration.
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @version 1.0.12
+ * @version 1.0.13
  */
 class Migration extends \yii\db\Migration {
 
@@ -101,11 +101,11 @@ class Migration extends \yii\db\Migration {
      * @return string Definizione di tipo per un enum
      */
     protected static function typeEnum(array $options, $notNull = false, $defaultValue = null) {
-        return "ENUM('" . implode("','", array_map(function($s) {
-                            return preg_replace('/\'/', "''", $s);
+        return "ENUM('" . implode("','", array_map(function ($s) {
+                            return str_repeat("'", "''", (string) $s);
                         }, $options)) . "')" .
                 ($notNull === true ? ' NOT NULL' : '') .
-                (!is_null($defaultValue) ? " DEFAULT '" . preg_replace('/\'/', "''", $defaultValue) . "'" : '');
+                (!is_null($defaultValue) ? " DEFAULT '" . str_replace("'", "''", (string) $defaultValue) . "'" : '');
     }
 
     /**
@@ -214,5 +214,4 @@ class Migration extends \yii\db\Migration {
     public function addForeignKey($name, $table, $columns, $refTable, $refColumns = null, $delete = null, $update = null) {
         parent::addForeignKey($name, $table, $columns, $refTable, $refColumns ? $refColumns : $columns, $delete, $update);
     }
-
 }

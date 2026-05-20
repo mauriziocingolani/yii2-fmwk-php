@@ -8,7 +8,7 @@ use yii\helpers\FileHelper as Helper;
  * Definisce alcuni metodi utility per la gestione dei files.
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @version 1.0.1
+ * @version 1.0.2
  */
 class FileHelper extends Helper {
 
@@ -20,11 +20,11 @@ class FileHelper extends Helper {
      * @return string Dimensione del file in forma leggibile
      */
     public static function GetHumanReadableFileSize($bytes, $decimals = 2) {
-        if (is_null($bytes))
+        if ($bytes === null)
             return null;
         $size = array('B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB');
-        $factor = floor((strlen($bytes) - 1) / 3);
-        return sprintf("%.{$decimals}f", $bytes / pow(1024, $factor)) . @$size[$factor];
+        $factor = (int) floor((strlen((string) $bytes) - 1) / 3);
+        $factor = min($factor, count($size) - 1);
+        return sprintf("%.{$decimals}f", $bytes / pow(1024, $factor)) . $size[$factor];
     }
-
 }

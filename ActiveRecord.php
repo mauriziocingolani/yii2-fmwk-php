@@ -21,7 +21,7 @@ use yii\web\NotFoundHttpException;
  * 
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @version 1.1.6
+ * @version 1.1.7
  */
 abstract class ActiveRecord extends \yii\db\ActiveRecord {
 
@@ -95,8 +95,9 @@ abstract class ActiveRecord extends \yii\db\ActiveRecord {
     public function getCreatedUpdatedParagraph($isFemale = false, $options = null) {
         $creatorName = $this->CreatedBy && isset($this->creator) ? Html::encode($this->creator->UserName) : null;
         $updaterName = isset($this->UpdatedBy) && $this->UpdatedBy && isset($this->updater) ? Html::encode($this->updater->UserName) : null;
-        $s = 'Creat' . ($isFemale ? 'a' : 'o') . ' il ' . date('d-m-Y', strtotime($this->Created)) .
-                ($this->CreatedBy ? " da <strong>$creatorName</strong>" : null);
+        $createdTime = $this->Created ? strtotime($this->Created) : false;
+        $s = 'Creat' . ($isFemale ? 'a' : 'o') . ' il ' . ($createdTime !== false ? date('d-m-Y', $createdTime) : '?') .
+                ($creatorName ? " da <strong>$creatorName</strong>" : null);
         if (isset($this->Updated) && $this->Updated)
             $s .= Html::tag('br') .
                     'Ultima modifica il ' . date('d-m-Y', strtotime($this->Updated)) .
@@ -275,7 +276,9 @@ abstract class ActiveRecord extends \yii\db\ActiveRecord {
      * @return string Data in formato italiano
      */
     public static function MysqlToItalianDate($mysqlDate) {
-        if (strpos($mysqlDate, ' '))
+        if ($mysqlDate === null || $mysqlDate === '')
+            return null;
+        if (strpos($mysqlDate, ' ') !== false)
             $mysqlDate = preg_split('/[ ]/', $mysqlDate)[0];
         return join('/', array_reverse(preg_split("/[-]/", $mysqlDate)));
     }
@@ -286,7 +289,9 @@ abstract class ActiveRecord extends \yii\db\ActiveRecord {
      * @return string Data in formato MySQL
      */
     public static function ItalianToMysqlDate($italianDate) {
-        if (strpos($italianDate, ' '))
+        if ($italianDate === null || $italianDate === '')
+            return null;
+        if (strpos($italianDate, ' ') !== false)
             $italianDate = preg_split('/[ ]/', $italianDate)[0];
         return join('-', array_reverse(preg_split("/[\/]/", $italianDate)));
     }
@@ -298,7 +303,11 @@ abstract class ActiveRecord extends \yii\db\ActiveRecord {
      * @return string Data e ora in formato italiano
      */
     public static function MysqlToItalianDateTime($string, $showSeconds = false) {
+        if ($string === null || $string === '')
+            return null;
         $split = preg_split('/[ ]/', $string);
+        if (!isset($split[1]))
+            return self::MysqlToItalianDate($split[0]);
         return self::MysqlToItalianDate($split[0]) . ' ' . substr($split[1], 0, $showSeconds ? 8 : 5);
     }
 
@@ -309,7 +318,11 @@ abstract class ActiveRecord extends \yii\db\ActiveRecord {
      * @return string Data e ora in formato MySQL
      */
     public static function ItalianToMysqlDateTime($string) {
+        if ($string === null || $string === '')
+            return null;
         $split = preg_split('/[ ]/', $string);
+        if (!isset($split[1]))
+            return self::ItalianToMysqlDate($split[0]);
         return self::ItalianToMysqlDate($split[0]) . ' ' . $split[1] . (strlen($split[1]) < 6 ? ':00' : '');
     }
 
@@ -320,7 +333,11 @@ abstract class ActiveRecord extends \yii\db\ActiveRecord {
      * @return string Ora in formato italiano
      */
     public static function MysqlToItalianTime($string, $showSeconds = false) {
+        if ($string === null || $string === '')
+            return null;
         $split = preg_split('/[ ]/', $string);
+        if (!isset($split[1]))
+            return null;
         return substr($split[1], 0, $showSeconds ? 8 : 5);
     }
 
@@ -331,7 +348,9 @@ abstract class ActiveRecord extends \yii\db\ActiveRecord {
      * @return string Ora in formato italiano
      */
     public static function MysqlToItalianUTCTime($string, $showSeconds = false) {
-        return date('H:i' . ($showSeconds ? ':s' : null), strtotime("$string UTC"));
+        if ($string === null || $string === '')
+            return null;
+        return date('H:i' . ($showSeconds ? ':s' : ''), strtotime("$string UTC"));
     }
 
     /**
@@ -341,7 +360,11 @@ abstract class ActiveRecord extends \yii\db\ActiveRecord {
      * @return string Ora in formato MySQL
      */
     public static function ItalianToMysqlTime($string) {
+        if ($string === null || $string === '')
+            return null;
         $split = preg_split('/[ ]/', $string);
+        if (!isset($split[1]))
+            return null;
         return $split[1] . (strlen($split[1]) < 6 ? ':00' : '');
     }
 
