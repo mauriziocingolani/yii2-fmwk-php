@@ -106,14 +106,14 @@ class FiscalCodeValidator extends Validator {
         return <<<JS
                 if(value.length>0) {
                         if (!value.match({$this->_regex})) {
-                                messages.push("$message");
+                                messages.push($message);
                         } else {
                                 var sum=0,even=$even,odd=$odd,rest=$rest;
                                 for(var i=0;i<15;i++) {
                                         sum+= (i%2==0 ? odd[value[i].toUpperCase()]:even[value[i].toUpperCase()]);
                                 }
                                 if(rest[sum%26]!=value[15].toUpperCase()) {
-                                        messages.push("$controlCharacterMessage");
+                                        messages.push($controlCharacterMessage);
                                 }  
                         }
                 }
