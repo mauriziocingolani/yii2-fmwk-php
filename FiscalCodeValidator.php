@@ -9,7 +9,7 @@ use yii\validators\Validator;
  * Validatore per campi che contengono un codice fiscale.
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @version 1.0.11
+ * @version 1.0.12
  * @link http://blog.marketto.it/2016/01/regex-validazione-codice-fiscale-con-omocodia/ Fonte regex di validazione
  */
 class FiscalCodeValidator extends Validator {
@@ -136,7 +136,7 @@ class FiscalCodeValidator extends Validator {
      * @param string|null $format Se indicato, restituisce la data formattata (formato di date())
      * @return \DateTime|string|null Data di nascita, oppure null se il codice non è valido
      */
-    public static function getBirthDate($code, $format = null) {
+    public static function GetBirthDate($code, $format = null) {
         if (!is_string($code) || $code === '')
             return null;
         $code = strtoupper(trim($code));
@@ -153,5 +153,21 @@ class FiscalCodeValidator extends Validator {
         if ($date > new \DateTime('today'))
             $date->modify('-100 years');
         return $format ? $date->format($format) : $date;
+    }
+
+    /**
+     * Ricava il codice catastale del comune di nascita dal codice fiscale,
+     * gestendo anche i casi di omocodia. Per i nati all'estero restituisce il codice
+     * dello stato (Zxxx).
+     * @param string $code Codice fiscale
+     * @return string|null Codice catastale (es. H501), oppure null se il codice non è valido
+     */
+    public static function GetBirthPlaceCode($code) {
+        if (!is_string($code) || $code === '')
+            return null;
+        $code = strtoupper(trim($code));
+        if (!(new self())->validate($code))
+            return null;
+        return $code[11] . strtr(substr($code, 12, 3), self::OMOCODES);
     }
 }
