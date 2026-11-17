@@ -9,7 +9,7 @@ use yii\validators\Validator;
  * Validatore per campi che contengono un codice fiscale.
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @version 1.0.10
+ * @version 1.0.11
  * @link http://blog.marketto.it/2016/01/regex-validazione-codice-fiscale-con-omocodia/ Fonte regex di validazione
  */
 class FiscalCodeValidator extends Validator {
@@ -35,6 +35,14 @@ class FiscalCodeValidator extends Validator {
         '6' => 6, 'F' => 5, 'O' => 14, 'X' => 23,
         '7' => 7, 'G' => 6, 'P' => 15, 'Y' => 24,
         '8' => 8, 'H' => 7, 'Q' => 16, 'Z' => 25,
+    ];
+    const MONTHS = [
+        'A' => 1, 'B' => 2, 'C' => 3, 'D' => 4, 'E' => 5, 'H' => 6,
+        'L' => 7, 'M' => 8, 'P' => 9, 'R' => 10, 'S' => 11, 'T' => 12,
+    ];
+    const OMOCODES = [
+        'L' => '0', 'M' => '1', 'N' => '2', 'P' => '3', 'Q' => '4',
+        'R' => '5', 'S' => '6', 'T' => '7', 'U' => '8', 'V' => '9',
     ];
     const REST = [
         0 => 'A', 7 => 'H', 14 => 'O', 21 => 'V',
@@ -118,5 +126,32 @@ class FiscalCodeValidator extends Validator {
                         }
                 }
         JS;
+    }
+
+    /**
+     * Ricava la data di nascita dal codice fiscale (gestisce anche i casi di omocodia).
+     * Il secolo viene dedotto rispetto alla data odierna: se l'anno a due cifre
+     * nel 2000 darebbe una data futura, si assume il 1900.
+     * @param string $code Codice fiscale
+     * @param string|null $format Se indicato, restituisce la data formattata (formato di date())
+     * @return \DateTime|string|null Data di nascita, oppure null se il codice non è valido
+     */
+    public static function getBirthDate($code, $format = null) {
+        if (!is_string($code) || $code === '')
+            return null;
+        $code = strtoupper(trim($code));
+        if (!(new self())->validate($code))
+            return null;
+        $year = strtr(substr($code, 6, 2), self::OMOCODES);
+        $month = self::MONTHS[$code[8]];
+        $day = (int) strtr(substr($code, 9, 2), self::OMOCODES);
+        if ($day > 40)
+            $day -= 40;
+        $date = \DateTime::createFromFormat('!Y-n-j', '20' . $year . '-' . $month . '-' . $day);
+        if ($date === false)
+            return null;
+        if ($date > new \DateTime('today'))
+            $date->modify('-100 years');
+        return $format ? $date->format($format) : $date;
     }
 }
